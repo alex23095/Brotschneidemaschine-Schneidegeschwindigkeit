@@ -1,0 +1,35 @@
+Requirements 
+Schneidegeschwindigkeit einer Brotschneidemaschine
+
+1.	Sicherheitskonzept: 
+-	Not-Halt-Taster (Motorbremse innerhalb 100ms auslösen)
+-	Eingreifschutz (Motorbremse unmittelbar auslösen)
+-	Wiederanlaufsperre (unbeabsichtigtes Starten verhindern)
+-	Alle Sicherheitseinrichtungen redundant (zweikanalig) ausgeführt
+
+2.	Regelbare Drehzahl
+-	Einstellbereiche (500 bis 3000 U/min)
+-	PID-Regelung (max. Drehzahländerung bei Last +-5%)
+-	Soll- und Istwerte bei Bearbeitung anzeigen
+-	Automatische Abschaltung bei Fehler (Überstrom, Blockade, Fehlfunktion)
+
+3.	Schneiden-Verschleiß-Überwachung
+-	Test zur Ermittlung der Grenzwerte durchführen
+-	Grenzwerte festlegen (entsprechende Warnhinweise anzeigen)
+-	Berechnung zyklisch durchführen
+-	Daten im nicht flüchtigem Speicher sichern
+
+4.	Anzeige und Bedienung
+-	3,5‘‘ Display
+-	Display, auch mit Handschuhen zu bedienen
+-	Betriebsmodus, Soll-Drehzahl, Sollwerte einstellbar
+-	Betriebszustände, Ist-Drehzahl, Fehlermeldungen, Sicherheitsstatus anzeigen
+-	Warn- und Sicherheitshinweise hervorheben
+
+5.	Fehlerprotokoll
+-	Log (mind. 10.000 Einträge)
+-	Exportierbar über USB
+-	sicherheits- und betriebsrelevanten Ereignissen
+-	Fehlerprotokoll mit Zeitstempel, Fehlercode und Kurzbeschreibung 
+-	Fehlerprotokoll über USB-Schnittstelle exportierbar
+	
