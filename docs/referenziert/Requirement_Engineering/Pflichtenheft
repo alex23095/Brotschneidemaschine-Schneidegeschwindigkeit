@@ -21,7 +21,7 @@ Schneidegeschwindigkeit einer Brotschneidemaschine
 -	Berechnung zyklisch und Daten im nichtflüchtigen Speicher sichern
 
 4.	Anzeige und Bedienung
--	3,5-Zoll-Touchdisplay, das die 
+-	3,5-Zoll-Touchdisplay
 -	Betriebszustände(grün, orange, rot), Drehzahlen, Fehlermeldungen(rot-blinkend) und Sicherheitsstatus(rot-leuchtend) anzeigen
 -	Betriebsmodus, Drehzahl, Sollwerte einstellen 
 -	User-Interface Reaktionszeit < 100ms auf Eingaben
