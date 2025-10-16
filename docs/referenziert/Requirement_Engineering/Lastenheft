@@ -7,22 +7,22 @@ Schneidegeschwindigkeit einer Brotschneidemaschine
 -	Alle gefahrbringenden Bewegungen der Maschine müssen beim Auslösen der Schutzausrüstung unmittelbar zum Stillstand gebracht werden. 
 
 2.	Regelbare Drehzahl
--	regelbare Drehzahleinstellung des Schneidemotors über User-Interface..
+-	regelbare Drehzahleinstellung des Schneidemotors über User-Interface
 
 3.	Schneiden-Verschleiß-Überwachung
 -	Betriebszeiten, Schnittanzahl und Belastungsdaten auswerten und daraus Restlebensdauer der Schneide ableiten. 
--	Wartungsintervalle vorausschauend zu planen  unerwartete Ausfälle vermeiden. 
--	Visualisierung der Überwachung/des Intervalls im HMI erfolgen.
+-	Wartungsintervalle vorausschauend planen -> unerwartete Ausfälle vermeiden
+-	Visualisierung der Überwachung/des Schneiden-Intervalls in User-Interface
 
 4.	Anzeige und Bedienung
--	Parametrierung und Überwachung der variablen Schneidegeschwindigkeit.
+-	Parametrierung und Überwachung der variablen Schneidegeschwindigkeit
 -	Betriebsmodus auswählbar
--	Sollwerte und Presets einstellbar-
--	Daten und Warnmeldungen anzeigen. 
+-	Sollwerte und Presets einstellbar
+-	Daten und Warnmeldungen anzeigen 
 -	Bedienung intuitiv, hygienisch und sicher ermöglichen (auch mit Handschuhen) 
 
 5.	Fehlerprotokoll
--	Sicherheits- und betriebsrelevanten Ereignisse mit Zeitstempel, 
+-	Sicherheits- und betriebsrelevanten Ereignisse mit Zeitstempel
 -	Fehlercode und Kurzbeschreibung 
 -	Protokoll auf User-Interface darstellen
 -	Log-File zusätzlich über einen USB-Port exportierbar
