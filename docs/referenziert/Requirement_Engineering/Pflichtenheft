@@ -3,8 +3,8 @@ Schneidegeschwindigkeit einer Brotschneidemaschine
 
 1.	Sicherheitseinrichtungen: 
 -	Sicherheitseinrichtungen redundant überwacht: 
-  o	Not-Halt-Taster  Motorbremse innerhalb 100ms auslösen
-  o	Schutzabdeckung  Motorbremse unmittelbar auslösen
+  o	Not-Halt-Taster -> Motorbremse innerhalb 100ms auslösen
+  o	Schutzabdeckung -> Motorbremse unmittelbar auslösen
 -	Wiederanlaufsperre verhindert unbeabsichtigtes Anlaufen nach Spannungswiederkehr
 
 2.	Regelbare Drehzahl 
