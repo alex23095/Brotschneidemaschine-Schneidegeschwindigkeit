@@ -1,0 +1,35 @@
+Pflichtenheft 
+Schneidegeschwindigkeit einer Brotschneidemaschine
+
+1.	Sicherheitseinrichtungen: 
+-	Sicherheitseinrichtungen redundant überwacht: 
+  o	Not-Halt-Taster  Motorbremse innerhalb 100ms auslösen
+  o	Schutzabdeckung  Motorbremse unmittelbar auslösen
+-	Wiederanlaufsperre verhindert unbeabsichtigtes Anlaufen nach Spannungswiederkehr
+
+2.	Regelbare Drehzahl 
+-	manuelle Einstellung der Soll-Drehzahl über das User-Interface im Bereich von 500 bis 3000 U/min. 
+-	PID-Regler für konstante Ist-Drehzahl mit Abweichung von maximal ± 5 % unter Last. 
+-	Soll- und Ist-Werte kontinuierlich überwachen und auf Display anzeigen. 
+-	automatische Abschaltung mit Fehlermeldung bei Überstrom, Blockade oder Fehlfunktion
+
+3.	Automatische Schneiden-Verschleiß-Überwachung
+-	Laufzeit, Drehzahl, Schnittkraft bei Bearbeitung erfassen und abspeichern
+-	Verschleißindex der Scheide anhand der Daten ermitteln
+-	Grenzwerte durch Tests ermitteln 
+-	Entsprechend der Grenzwerte Warnmeldungen und Hinweise(z.B. Messerwechsel) am User-Interface ausgeben 
+-	Berechnung zyklisch und Daten im nichtflüchtigen Speicher sichern
+
+4.	Anzeige und Bedienung
+-	3,5-Zoll-Touchdisplay, das die 
+-	Betriebszustände(grün, orange, rot), Drehzahlen, Fehlermeldungen(rot-blinkend) und Sicherheitsstatus(rot-leuchtend) anzeigen
+-	Betriebsmodus, Drehzahl, Sollwerte einstellen 
+-	User-Interface Reaktionszeit < 100ms auf Eingaben
+-	User-Interface mit Handschuhen bedienbar 
+-	Warn- und Sicherheitsmeldungen optisch hervorheben
+
+5.	Fehlerprotokoll
+-	Fehlerprotokoll, mit allem sicherheits- und betriebsrelevanten Ereignissen
+-	Fehlerprotokoll mit Zeitstempel, Fehlercode und Kurzbeschreibung 
+-	Fehlerprotokoll mindestens 10 000 Einträge
+-	Über USB-Schnittstelle exportierbar
