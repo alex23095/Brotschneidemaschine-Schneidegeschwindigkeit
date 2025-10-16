@@ -29,7 +29,7 @@ Schneidegeschwindigkeit einer Brotschneidemaschine
 -	Warn- und Sicherheitsmeldungen optisch hervorheben
 
 5.	Fehlerprotokoll
--	Fehlerprotokoll, mit allem sicherheits- und betriebsrelevanten Ereignissen
+-	Fehlerprotokoll mit allem sicherheits- und betriebsrelevanten Ereignissen
 -	Fehlerprotokoll mit Zeitstempel, Fehlercode und Kurzbeschreibung 
 -	Fehlerprotokoll mindestens 10 000 Einträge
 -	Über USB-Schnittstelle exportierbar
