@@ -4,7 +4,7 @@ Schneidegeschwindigkeit einer Brotschneidemaschine
 1.	Sicherheitskonzept:
 -	aktuellen Sicherheitsbestimmungen gemäß Sicherheitsnormen 
 -	Not-Halt-Vorrichtung, Eingreifschutz, Wiederanlaufschutz verpflichtend. 
--	Alle gefahrbringenden Bewegungen der Maschine müssen beim Auslösen der Schutzausrüstung unmittelbar zum Stillstand gebracht werden. 
+-	Alle gefahrbringenden Bewegungen der Maschine müssen beim Auslösen der Schutzausrüstung unittelbar (d.h. nach zeitlichen Vorgaben der Risikobeurteilung) zum Stillstand gebracht werden. 
 
 2.	Regelbare Drehzahl
 -	regelbare Drehzahleinstellung des Schneidemotors über User-Interface
