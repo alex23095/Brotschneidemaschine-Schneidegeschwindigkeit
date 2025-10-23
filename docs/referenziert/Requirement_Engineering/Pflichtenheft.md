@@ -1,11 +1,11 @@
-# Pflichtenheft  
+# 4. Pflichtenheft  
 ## Schneidegeschwindigkeit einer Brotschneidemaschine
 
 ---
 
-## 1. Sicherheitseinrichtungen
+## 4.1 Sicherheitseinrichtungen
 
-### 1.1 Sicherheitsfunktionen
+### 4.1.1 Sicherheitsfunktionen
 - Sicherheitseinrichtungen werden **redundant überwacht**:
   - **Not-Halt-Taster**: löst Motorbremse **innerhalb von 100 ms** aus.
   - **Schutzabdeckung**: löst Motorbremse **unmittelbar** aus.
@@ -16,9 +16,9 @@
 
 ---
 
-## 2. Regelbare Drehzahl
+## 4.2 Regelbare Drehzahl
 
-### 2.1 Funktionsumfang
+### 4.2.1 Funktionsumfang
 - **Manuelle Einstellung** der Soll-Drehzahl über das User-Interface im Bereich von **500 bis 3000 U/min**.
 - Implementierung eines **PWM-gesteuerten Motorcontrollers**.
 - **PID-Regler** sorgt für konstante Ist-Drehzahl mit maximaler Abweichung von **± 5 %** unter Last.
@@ -28,38 +28,38 @@
   - Blockade  
   - Fehlfunktion
 
-### 2.2 Benutzeroberfläche
+### 4.2.2 Benutzeroberfläche
 - Drehzahlregelung über Touchdisplay (0–100 % in 10 %-Schritten).
 - Anzeige der aktuellen und der Soll-Drehzahl in Echtzeit.
 - Anzeige-Update-Rate ≤ 2 s (asynchrone UI-Aktualisierung).
 
 ---
 
-## 3. Automatische Schneiden-Verschleiß-Überwachung
+## 4.3 Automatische Schneiden-Verschleiß-Überwachung
 
-### 3.1 Datenerfassung
+### 4.3.1 Datenerfassung
 - Erfassung und Speicherung von:
   - **Laufzeit**
   - **Drehzahl**
   - **Schnittkraft** bei Bearbeitung
 - Ableitung eines **Verschleißindex** der Schneide anhand dieser Daten.
 
-### 3.2 Berechnungs- und Speicherlogik
+### 4.3.2 Berechnungs- und Speicherlogik
 - **Grenzwerte** für Verschleiß werden durch Tests ermittelt.
 - **Zyklische Berechnung** des Verschleißindexes.
 - Speicherung aller Daten im **nichtflüchtigen Speicher (EEPROM)**.
 - **Algorithmus zur Restlebensdauerberechnung** basierend auf Belastungsdaten.
 
-### 3.3 Benutzerinformation
+### 4.3.3 Benutzerinformation
 - Ausgabe von **Warnmeldungen** und **Hinweisen** (z. B. Messerwechsel) am User-Interface.
 - **Wartungsanzeige** als Pop-up im Display.
 - **Wartungsempfehlungen** auf Basis der Restlebensdauer.
 
 ---
 
-## 4. Anzeige und Bedienung
+## 4.4 Anzeige und Bedienung
 
-### 4.1 Display und UI
+### 4.4.1 Display und UI
 - 3,5-Zoll-Touchdisplay mit hygienischer Oberfläche.
 - Anzeige von:
   - **Betriebszuständen**  
@@ -70,7 +70,7 @@
 - **Reaktionszeit des User-Interfaces**: < 100 ms auf Eingaben.
 - Bedienung auch **mit Handschuhen** möglich (kapazitives Touchpanel mit angepasster Empfindlichkeit).
 
-### 4.2 Benutzerführung
+### 4.4.2 Benutzerführung
 - Menüstruktur mit Betriebsmodi:
   - **Automatik**
   - **Manuell**
@@ -81,9 +81,9 @@
 
 ---
 
-## 5. Fehlerprotokoll
+## 4.5. Fehlerprotokoll
 
-### 5.1 Funktionsumfang
+### 4.5.1 Funktionsumfang
 - Aufzeichnung aller **sicherheits- und betriebsrelevanten Ereignisse**.
 - Protokoll enthält:
   - **Zeitstempel**
@@ -93,7 +93,7 @@
 - Speicherung im internen Speicher (FIFO-Prinzip).
 - Darstellung des Fehlerprotokolls auf dem User-Interface.
 
-### 5.2 Export
+### 4.5.2 Export
 - **Exportfunktion über USB-Schnittstelle**:
   - Dateiformat: **CSV**
   - Unterstützte Datenträger: **FAT32**
@@ -102,7 +102,7 @@
 
 ---
 
-## 6. Systemarchitektur (Kurzbeschreibung)
+## 5.6 Systemarchitektur (Kurzbeschreibung)
 
 - **Mikrocontroller-Steuerung** mit PWM-Ausgang und Drehzahlerfassung.
 - **Sensorik** für Stromaufnahme, Drehzahl und Vibrationsanalyse.
@@ -112,7 +112,7 @@
 
 ---
 
-## 7. Zusammenfassung
+## 5.7. Zusammenfassung
 
 | Bereich | Kernfunktion | Technische Umsetzung |
 |----------|---------------|----------------------|
