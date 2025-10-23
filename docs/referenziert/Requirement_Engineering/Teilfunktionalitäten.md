@@ -1,60 +1,25 @@
-# Software-Enigeering-Git
-Übungsaufgaben Software-Engineering
+## 2.1 Funktionale Requirements
 
-# Teilfunktionalitäten des Systems
-
-## 1. Sicherheitsfunktionen (F9, N3)
-**Ziel:**  
-Sicherstellung eines gefahrlosen Betriebs gemäß EN ISO 13849-1.  
-
-**Beschreibung:**  
-- Not-Halt/Bedienerschutz über zweikanalige Sicherheitssteuerung.  
-- Überwachung der Reaktionszeit und Protokollierung der Ergebnisse.  
-- Safe-State-Aktivierung bei Fehler oder Signalabweichung.  
-
----
-
-## 2. Motorsteuerung (F1, F2)
-**Ziel:**  
-Regelung des Antriebsmotors über PWM-Signal.
-
-**Beschreibung:**  
-- Drehzahl einstellbar von 0–100 % in 10 %-Schritten.  
-- Steuerung über Touchdisplay (manueller oder automatischer Modus).  
-- Implementierung einer PWM-gesteuerten Motorregelung mit Soft-Start und -Stop.  
+| Nr. | Requirement (messbar formuliert) | Herkunft |
+|-----|----------------------------------|-----------|
+| 1 | Schneidemotor mit einer variablen Drehzahl zwischen **500 U/min und 3000 U/min**, regelbar in **10 %-Schritten**. | 1.2 |
+| 2 | Die Drehzahl wird über das User-Interface eingestellt; Änderungen werden innerhalb von **1 s** an die Motorsteuerung übertragen. | 1.2 |
+| 3 | Das System erfasst kontinuierlich die **Stromaufnahme (±2 %)** und **Vibrationsamplitude (±0,01 g)** der Schneide zur Verschleißüberwachung. | 1.3 |
+| 4 | Die Restlebensdauer der Schneide wird aus **Betriebszeit (min)**, **Schnittanzahl** und **Belastungsdaten** berechnet; die Berechnung erfolgt mindestens **alle 10 s**. | 1.3 |
+| 5 | Das System generiert eine Wartungsempfehlung, sobald die berechnete Restlebensdauer **unter 10 %** des Sollwertes fällt, und zeigt sie als Pop-up auf dem Display an. | 1.3 |
+| 6 | Das User-Interface zeigt die **aktuellen Betriebsmodi, Sollwerte und gespeicherten Presets** an; Änderungen werden innerhalb von **2 s** übernommen. | 1.4 |
+| 7 | Alle Sicherheits- und Betriebsereignisse werden mit **Zeitstempel (±1 s Genauigkeit)**, **Fehlercode** und **Beschreibung** in einer Logdatei gespeichert. | 1.5 |
+| 8 | Das Fehlerprotokoll wird auf dem Display angezeigt und kann als **CSV-Datei** über **USB 2.0** auf **FAT32-Datenträger** exportiert werden; der Exportvorgang dauert **< 5 s pro 1000 Einträge**. | 1.5 |
+| 9 | Bei Betätigung des Not-Halts stoppt der Schneidemotor und alle Antriebe innerhalb von **< 0,5 s** vollständig. | 1.1 |
 
 ---
 
-## 3. Sensorik & Belastungsanalyse (F3, F4)
-**Ziel:**  
-Erfassung der Schneidenbelastung und Berechnung der Restlebensdauer (RUL).
+## 2.2 Nicht-funktionale Requirements
 
-**Beschreibung:**  
-- Messung der Stromaufnahme und Vibrationen während des Betriebs.  
-- Verarbeitung der Signale per FFT-Analyse zur Ermittlung der Werkzeugbelastung.  
-- Berechnung der Restlebensdauer anhand der gemessenen Belastungsdaten.  
-
---
-
-## 4. Anzeige und Bedienung (F5)
-**Ziel:**  
-Automatische Information des Bedieners über anstehende Wartung.  
-
-**Beschreibung:**  
-- Anzeige eines Pop-ups im Display bei Erreichen der RUL-Grenze.  
-- Speicherung des Wartungseintrags im EEPROM (auch nach Neustart erhalten).  
-- Quittierung durch den Benutzer über das Touchdisplay.  
-
----
-
-## 4. Fehlerauswertung /-speicher (F7, F8)
-**Ziel:**  
-Erfassen, Speichern und Exportieren von Betriebs- und Diagnosedaten.  
-
-**Beschreibung:**  
-- Speicherung der Betriebsdaten (z. B. Drehzahl, Belastung, Status) in CSV-Dateien.  
-- Pufferung von bis zu 1000 Einträgen.  
-- Export über USB-Stick bei Einstecken des Geräts.   
-
----
-
+| Nr. | Requirement (messbar formuliert) | Kategorie | Herkunft |
+|-----|----------------------------------|------------|-----------|
+| 1 | Das System erfüllt die Sicherheitsanforderungen gemäß **EN ISO 13849-1 Performance Level d**. | Sicherheit | 1.1 |
+| 2 | Die Bedienoberfläche reagiert auf Eingaben mit **max. 0,3 s Verzögerung** und bleibt bei **10 mm dicken Handschuhen** vollständig bedienbar. | Usability | 1.4 |
+| 3 | Beim Auslösen der Schutzausrüstung werden alle gefährdenden Bewegungen innerhalb von **0,5 s ± 0,05 s** gestoppt. | Leistung/Sicherheit | 1.1 |
+| 4 | Die Anzeige auf dem User-Interface aktualisiert Betriebsparameter innerhalb von **2 s**, wenn Eingangsdaten geändert werden. | Performance | 1.4 |
+| 5 | Die USB-Schnittstelle erkennt und liest **FAT32-formatierte Datenträger** mit einer Größe bis **32 GB** und einer Dateigröße bis **4 GB**. | Kompatibilität | 1.5 |
