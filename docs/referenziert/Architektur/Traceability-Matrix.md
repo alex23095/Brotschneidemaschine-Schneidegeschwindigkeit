@@ -7,7 +7,7 @@ MS - Monitoring-Service
 DM - Data-Management
 SCU - Safety-Control-Unit
 
-**Traceability-Matrix
+**Traceability-Matrix**
 | Requirement | Systemkomponente |
 |--------------|----------------------------------|
 | **F1** | MC - Motor-Controller |
