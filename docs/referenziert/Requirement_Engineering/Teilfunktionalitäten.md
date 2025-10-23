@@ -2,15 +2,15 @@
 
 | Nr. | Requirement (messbar formuliert) | Herkunft |
 |-----|----------------------------------|-----------|
-| 1 | Schneidemotor mit einer variablen Drehzahl zwischen **500 U/min und 3000 U/min**, regelbar in **10 %-Schritten**. | 1.2 |
-| 2 | Die Drehzahl wird über das User-Interface eingestellt; Änderungen werden innerhalb von **1 s** an die Motorsteuerung übertragen. | 1.2 |
-| 3 | Das System erfasst kontinuierlich die **Stromaufnahme (±2 %)** und **Vibrationsamplitude (±0,01 g)** der Schneide zur Verschleißüberwachung. | 1.3 |
-| 4 | Die Restlebensdauer der Schneide wird aus **Betriebszeit (min)**, **Schnittanzahl** und **Belastungsdaten** berechnet; die Berechnung erfolgt mindestens **alle 10 s**. | 1.3 |
-| 5 | Das System generiert eine Wartungsempfehlung, sobald die berechnete Restlebensdauer **unter 10 %** des Sollwertes fällt, und zeigt sie als Pop-up auf dem Display an. | 1.3 |
-| 6 | Das User-Interface zeigt die **aktuellen Betriebsmodi, Sollwerte und gespeicherten Presets** an; Änderungen werden innerhalb von **2 s** übernommen. | 1.4 |
-| 7 | Alle Sicherheits- und Betriebsereignisse werden mit **Zeitstempel (±1 s Genauigkeit)**, **Fehlercode** und **Beschreibung** in einer Logdatei gespeichert. | 1.5 |
-| 8 | Das Fehlerprotokoll wird auf dem Display angezeigt und kann als **CSV-Datei** über **USB 2.0** auf **FAT32-Datenträger** exportiert werden; der Exportvorgang dauert **< 5 s pro 1000 Einträge**. | 1.5 |
-| 9 | Bei Betätigung des Not-Halts stoppt der Schneidemotor und alle Antriebe innerhalb von **< 0,5 s** vollständig. | 1.1 |
+| 1 | Schneidemotor mit einer variablen Drehzahl zwischen **500 U/min und 3000 U/min**, regelbar in **10 %-Schritten**
+| 2 | Die Drehzahl wird über das User-Interface eingestellt; Änderungen werden innerhalb von **1 s** an die Motorsteuerung übertragen
+| 3 | Das System erfasst kontinuierlich die **Stromaufnahme (±2 %)** und **Vibrationsamplitude (±0,01 g)** der Schneide zur Verschleißüberwachung
+| 4 | Die Restlebensdauer der Schneide wird aus **Betriebszeit (min)**, **Schnittanzahl** und **Belastungsdaten** berechnet; die Berechnung erfolgt mindestens **alle 10 s**
+| 5 | Das System generiert eine Wartungsempfehlung, sobald die berechnete Restlebensdauer **unter 10 %** des Sollwertes fällt, und zeigt sie als Pop-up auf dem Display an
+| 6 | Das User-Interface zeigt die **aktuellen Betriebsmodi, Sollwerte und gespeicherten Presets** an; Änderungen werden innerhalb von **2 s** übernommen
+| 7 | Alle Sicherheits- und Betriebsereignisse werden mit **Zeitstempel (±1 s Genauigkeit)**, **Fehlercode** und **Beschreibung** in einer Logdatei gespeichert
+| 8 | Das Fehlerprotokoll wird auf dem Display angezeigt und kann als **CSV-Datei** über **USB 2.0** auf **FAT32-Datenträger** exportiert werden; der Exportvorgang dauert **< 5 s pro 1000 Einträge**
+| 9 | Bei Betätigung des Not-Halts stoppt der Schneidemotor und alle Antriebe innerhalb von **< 0,5 s** vollständig
 
 ---
 
