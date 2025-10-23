@@ -1,27 +1,24 @@
-## 2. Requirements (abgeleitet aus dem Lastenheft)
+## 2.1 Funktionale Requirements
 
-### 2.1 Funktionale Requirements
-
-| Nr. | Requirement | Herkunft (Lastenheft) |
-|-----|--------------|------------------------|
-| F1 | Das System muss den Schneidemotor mit variabler Drehzahl betreiben können. | 1.2 |
-| F2 | Die Drehzahl soll über ein User-Interface einstellbar sein. | 1.2 |
-| F3 | Das System muss eine Schneiden-Verschleiß-Überwachung durchführen. | 1.3 |
-| F4 | Das System soll aus Betriebszeit, Schnittanzahl und Belastungsdaten die Restlebensdauer der Schneide berechnen. | 1.3 |
-| F5 | Das System soll Wartungsempfehlungen auf Basis der Restlebensdauer ausgeben. | 1.3 |
-| F6 | Das User-Interface muss Betriebsmodus, Sollwerte und Presets anzeigen und ändern können. | 1.4 |
-| F7 | Das System soll Sicherheits- und Betriebsereignisse mit Zeitstempel, Fehlercode und Beschreibung protokollieren. | 1.5 |
-| F8 | Das Fehlerprotokoll soll auf dem Display angezeigt und über USB exportiert werden können. | 1.5 |
-| F9 | Die Not-Halt-Funktion soll alle gefahrbringenden Bewegungen sofort stoppen. | 1.1 |
-
+| Nr. | Requirement (messbar formuliert) |
+|-----|----------------------------------|
+| 1 | Schneidemotor mit variabler Drehzahl zwischen **500 U/min und 3000 U/min**, regelbar in **10 %-Schritten**
+| 2 | Drehzahl über das User-Interface einstellbar; Änderungen innerhalb von **250ms** an die Motorsteuerung übertragen
+| 3 | Strommessung (Intervall 200ms) **Stromaufnahme (±2 %)** und **Vibrationsamplitude (±0,01 g)** der Schneide zur Verschleißüberwachung
+| 4 | Berechnung Restlebensdauer der Schneide aus **Betriebszeit (min)**, **Schnittanzahl** und **Belastungsdaten**; die Berechnung erfolgt mindestens **alle 10 s**
+| 5 | Wartungsempfehlung, wenn berechnete Restlebensdauer **unter 10 %** des Sollwertes, entsprechende Pop-up-Meldung auf Display
+| 6 | User-Interface zeigt **aktuellen Betriebsmodi, Sollwerte und gespeicherten Presets**; Änderungen innerhalb von **100ms s** übernommen
+| 7 | Sicherheits- und Betriebsereignisse mit **Zeitstempel (±1 s Genauigkeit)**, **Fehlercode** und **Beschreibung** in einer Logdatei gespeichert
+| 8 | Fehlerprotokoll am Display angezeigt und als **CSV-Datei** über **USB 2.0** auf **FAT32-Datenträger** exportiert; Dauer Exportvorgang **< 5 s pro 1000 Einträge**
+| 9 | Safety-Fehler (Not-Halt / Bedienerschutz) stoppt Schneidemotor und alle Antriebe innerhalb von **< 0,5 s** vollständig
 ---
 
-### 2.2 Nicht-funktionale Requirements
+## 2.2 Nicht-funktionale Requirements
 
-| Nr. | Requirement | Kategorie | Herkunft |
-|-----|--------------|------------|-----------|
-| N1 | Das System muss den aktuellen Sicherheitsnormen entsprechen. | Sicherheit | 1.1 |
-| N2 | Die Bedienung soll intuitiv und hygienisch möglich sein (auch mit Handschuhen). | Usability | 1.4 |
-| N3 | Das System muss eine Reaktionszeit unter 0,5 Sekunden beim Auslösen der Schutzausrüstung gewährleisten. | Leistung/Sicherheit | 1.1 |
-| N4 | Die Anzeige am User-Interface soll in weniger als 2 Sekunden aktualisiert werden. | Performance | 1.4 |
-| N5 | Die USB-Schnittstelle muss gängige FAT32-formatierte Datenträger unterstützen. | Kompatibilität | 1.5 |
+| Nr. | Requirement (messbar formuliert) | Kategorie |
+|-----|----------------------------------|------------|
+| 1 | Sicherheitsanforderungen gemäß **EN ISO 13849-1 Performance Level d** | Sicherheit |
+| 2 | Bedienoberfläche reagiert auf Eingaben mit **max. 0,3 s Verzögerung**; Bedienbarkeit auch mit **10 mm dicken Handschuhen** gewährleistet. | Usability |
+| 3 | Bei Auslösen der Schutzausrüstung werden alle gefährdenden Bewegungen innerhalb von **0,5 s ± 0,05 s** gestoppt. | Leistung/Sicherheit |
+| 4 | Betriebsparameteranzeige auf User-Interface aktualisiert in **500ms** Intervall | Performance |
+| 5 | USB-Schnittstelle unterstützt **FAT32-formatierte Datenträger**, Dateigröße bis **4 GB**. | Kompatibilität |
