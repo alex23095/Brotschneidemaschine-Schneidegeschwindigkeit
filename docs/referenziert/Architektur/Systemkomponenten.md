@@ -1,4 +1,4 @@
-**Systemkomponenten**
+# Systemkomponenten
 
 - MC = Motor-Controller
 - UI = User-Interface-Service
@@ -6,8 +6,10 @@
 - MS = Monitoring-Service
 - DM = Data-Management
 - SCU = Safety-Control-Unit
+  
 
-**Systemschnittstellen**
+# Systemschnittstellen
+
 | Schnittstelle (Quelle → Ziel) | Zweck / Datentyp |
 |----------------|------------------|
 | **User Interface ↔ Main Control Unit** | Sollwerte, Betriebsmodus, Benutzeraktionen, Statusdaten |
