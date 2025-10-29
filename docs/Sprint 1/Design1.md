@@ -2,3 +2,4 @@
 
 ## Klassendiagramm
 
+![Klassendiagramm](../referenziert/Design/Klassendiagramm.png)
