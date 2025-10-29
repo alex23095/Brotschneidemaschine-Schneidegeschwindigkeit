@@ -7,3 +7,5 @@
 ## Sequenzdiagramm
 ![Sequenzdiagramm](../referenziert/Design/Sequenzdiagramm.png)
 
+## Kommunikationsdiagramm
+![Kommunikationsdiagramm](../referenziert/Design/Kommunikationsdiagramm.png)
