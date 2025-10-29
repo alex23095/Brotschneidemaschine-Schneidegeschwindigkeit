@@ -2,4 +2,4 @@
 
 ## Klassendiagramm
 
-![Klassendiagramm](../referenziert/Design/Klassendiagramm1.png)
+![Klassendiagramm](../referenziert/Design/Klassendiagramm.png)
