@@ -103,8 +103,3 @@ Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
 ### Schritt 6: Review & Retro
 
 
-
-### Verknüpfung zur Traceability-Matrix
-
-Die Traceability-Matrix für Sprint 1 dokumentiert die Umsetzung der oben genannten Requirements 
-und zeigt die Zuordnung zwischen Anforderungen, Systemkomponenten und Designklassen.
