@@ -34,8 +34,6 @@ um zunächst eine stabile und getestete Kernfunktionalität zu gewährleisten.
 2. Implementierung und Test der Sicherheitsabschaltung (Not-Halt).
 3. Nachweis der Reaktionszeiten der sicherheitsrelevanten Komponenten.
 
----
-
 ### Schritt 1: Recherche
 
 Im Rahmen der Sprintplanung wurden gezielte Recherchen zu den Themen **PWM-Ansteuerung**, **Sicherheitssteuerungen**
@@ -51,9 +49,6 @@ Die wichtigsten Erkenntnisse:
 
 Diese Ergebnisse flossen direkt in das Architektur- und Designkonzept ein.
 
-[Rechercheergebnisse](../referenziert/Recherche_Sprint1.md)
-
----
 
 ### Schritt 2: Architektur
 
@@ -77,9 +72,6 @@ Darstellungsebene strikt getrennt sind.
 
 Das folgende Diagramm (separat abgelegt) visualisiert die Architektur und ihre Schnittstellen.
 
-[Architektur](Architektur1.md)
-
----
 
 ### Schritt 3: Design
 
@@ -101,9 +93,6 @@ Die Interaktion zwischen diesen Klassen wurde durch ein Sequenzdiagramm beschrie
 Benutzereingabe bis zur Motorregelung zeigt.  
 Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
 
-[Design](Design1.md)
-
----
 
 ### Schritt 4: Implementierung
 
@@ -122,4 +111,5 @@ Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
 Die Traceability-Matrix für Sprint 1 dokumentiert die Umsetzung der oben genannten Requirements 
 und zeigt die Zuordnung zwischen Anforderungen, Systemkomponenten und Designklassen.
 
-[Traceability-Matrix Sprint 1](docs.Sprint1.Implementierung.md)
+[Traceability-Matrix Sprint 1](docs/Sprint1/Implementierung.md)
+
