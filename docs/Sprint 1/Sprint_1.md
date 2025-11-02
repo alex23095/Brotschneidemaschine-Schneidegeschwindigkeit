@@ -24,9 +24,7 @@ um zunächst eine stabile und getestete Kernfunktionalität zu gewährleisten.
 - **F9:** Not-Halt / Sicherheitsabschaltung  
 - **NF1:** Einhaltung Sicherheitsnorm (PL d)  
 - **NF2:** Reaktionszeit und Bedienbarkeit des UI  
-- **NF3:** Sicherheitsreaktionszeit des Systems  
-
-**Sprint-Zeitraum:** 14.10.2025 – 21.10.2025  
+- **NF3:** Sicherheitsreaktionszeit des Systems   
 
 **Sprintziel:**
 
@@ -110,6 +108,3 @@ Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
 
 Die Traceability-Matrix für Sprint 1 dokumentiert die Umsetzung der oben genannten Requirements 
 und zeigt die Zuordnung zwischen Anforderungen, Systemkomponenten und Designklassen.
-
-[Traceability-Matrix Sprint 1](docs/Sprint1/Implementierung.md)
-
