@@ -24,7 +24,8 @@ _Ebenenübersicht_:
 
 ## Komponentendiagramm
 
-![Komponentendiagramm](../referenziert/Architektur/Komponentendiagramm_Motorsteuerung.png)
+![Komponentendiagramm](../referenziert/Architektur/Komponentendiagramm.png)
+
 
 ### Komponentenübersicht
 
