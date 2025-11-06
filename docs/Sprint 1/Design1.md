@@ -100,3 +100,21 @@ Das Diagramm eignet sich besonders gut, um **Abhängigkeiten und Nachrichtenpfad
 ohne den Fokus auf den zeitlichen Ablauf zu legen.
 
 ![Kommunikationsdiagramm](../referenziert/Design/Kommunikationsdiagramm.png)
+
+## Design Pattern
+
+### Singleton-Pattern
+
+Im Projekt wird das **Singleton-Pattern** eingesetzt, um sicherzustellen,  
+dass zentrale Steuerungskomponenten wie die `MainControlUnit` nur **einmalig instanziiert** werden.  
+Dadurch wird verhindert, dass mehrere voneinander unabhängige Steuerobjekte entstehen,  
+die widersprüchliche Sollwerte oder Zustände verwalten könnten.
+
+Das Singleton bietet folgende Vorteile:
+- **Globale Zugriffsmöglichkeit** auf die Hauptsteuerung (`MainControlUnit::getInstance()`),
+- **Konsistente Zustandsverwaltung** für RUN, STOP, FAULT über das gesamte System,
+- **Eindeutige Koordination** der Kommunikation zwischen UI, Motorsteuerung und Safety.
+
+Durch die Nutzung des Singleton-Patterns bleibt die Softwarestruktur einfach, testbar  
+und für ein eingebettetes System mit begrenzten Ressourcen optimal geeignet.
+
