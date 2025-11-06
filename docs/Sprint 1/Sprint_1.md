@@ -2,95 +2,99 @@
 
 ### Sprint Planning
 
-Zu Beginn des ersten Sprints habe ich die relevanten Anforderungen (Requirements) aus dem Gesamtsystem ausgewählt.  
-Der Fokus lag dabei auf der Implementierung der **grundlegenden Kernfunktionen**, die für den späteren Betrieb des
-Systems zwingend erforderlich sind. Ziel war es, eine lauffähige Basiskommunikation zwischen **User Interface**, 
-**Motorsteuerung** und **Sicherheitssteuerung** herzustellen.
+Zu Beginn des ersten Sprints wurden die relevanten Anforderungen (Requirements) aus dem Gesamtsystem ausgewählt.  
+Der Fokus lag auf der Implementierung der **grundlegenden Kernfunktionen**, die für den späteren Betrieb der
+Brotschneidemaschine zwingend erforderlich sind.  
+Ziel war es, eine lauffähige Kommunikation zwischen **User Interface**, **Steuerlogik** und **Sicherheitsabschaltung** herzustellen.
 
 Im Zentrum des Sprints standen folgende Teilfunktionalitäten:
 
-- Steuerung des Motors mit variabler Drehzahl (Grundregelung)
-- Bedienung der Drehzahl über die Benutzeroberfläche (UI)
-- Umsetzung einer Not-Halt-Funktion zur sofortigen Sicherheitsabschaltung
-- Einhaltung der grundlegenden Sicherheits- und Reaktionszeiten gemäß den nicht-funktionalen Anforderungen
+- Steuerung des Schneidemotors in 10 %-Stufen (Sollwertvorgabe)
+- Bedienung der Schneidegeschwindigkeit über das User-Interface
+- Umsetzung der Not-Halt-Funktion (Safety-Input ≤ 100 ms)
+- Einhaltung der Reaktions- und Zykluszeiten gemäß nicht-funktionaler Anforderungen
 
-Anforderungen mit niedriger Priorität (z. B. Wartungslogik, Logging, Datenexport) wurden bewusst zurückgestellt, 
-um zunächst eine stabile und getestete Kernfunktionalität zu gewährleisten.
+Anforderungen mit niedriger Priorität (z. B. Wartungslogik, Monitoring, Logging) wurden bewusst zurückgestellt,
+um zunächst eine stabile und getestete Kernfunktionalität sicherzustellen.
 
 **Requirements (Sprint 1):**
 
-- **F1:** Motorsteuerung mit variabler Drehzahl  
-- **F2:** Drehzahleinstellung über User-Interface  
-- **F9:** Not-Halt / Sicherheitsabschaltung  
-- **NF1:** Einhaltung Sicherheitsnorm (PL d)  
-- **NF2:** Reaktionszeit und Bedienbarkeit des UI  
-- **NF3:** Sicherheitsreaktionszeit des Systems   
+- **F1:** Steuerung des Schneidemotors (10 %-Stufen)  
+- **F2:** Not-Halt / Sicherheitsabschaltung  
+- **NF1:** Implementierung in C++ auf STM32  
+- **NF2:** Reaktionszeit ≤ 200 ms  
+- **NF3:** Feste Zykluszeit 100 ms  
+- **NF6:** Genauigkeit ± 5 % Soll-/Ist-Drehzahl  
+- **NF7:** Funktionssicherheit im Temperaturbereich 0–45 °C  
 
 **Sprintziel:**
 
-1. Funktionsfähige Kernsteuerung des Motors über UI.
-2. Implementierung und Test der Sicherheitsabschaltung (Not-Halt).
-3. Nachweis der Reaktionszeiten der sicherheitsrelevanten Komponenten.
+1. Funktionsfähige Steuerung des Schneidemotors über das UI  
+2. Implementierung und Test der Sicherheitsabschaltung (Not-Halt)  
+3. Nachweis der Reaktionszeiten und Zykluszeiten  
+4. Basistest der Drehzahlgenauigkeit und Umgebungstoleranz  
+
+---
 
 ### Schritt 1: Recherche
 
-Im Rahmen der Sprintplanung wurden gezielte Recherchen zu den Themen **PWM-Ansteuerung**, **Sicherheitssteuerungen**
-und **UI-Update-Strategien** durchgeführt.  
-Ziel war es, die Anforderungen an Zykluszeiten, Reaktionszeiten und Sicherheitsstufen (Performance Level d nach 
-EN ISO 13849-1) technisch präzise umsetzen zu können.
+Im Rahmen der Sprintplanung wurden gezielte Recherchen zu den Themen **PWM-Ansteuerung**, **Safety-Schaltungen**
+und **UI-Aktualisierungsstrategien** durchgeführt.  
+Ziel war es, die technischen Anforderungen an Reaktionszeiten, deterministische Ausführung und Sicherheitsverhalten präzise umzusetzen.
 
-Die wichtigsten Erkenntnisse:
+**Wesentliche Erkenntnisse:**
 
-- Für die PWM-Regelung wurde eine Zykluszeit von 1–5 ms als praktikabel ermittelt.  
-- Die Sicherheitsabschaltung muss zweikanalig ausgelegt sein (Fail-Safe Prinzip).  
-- UI-Updates in Intervallen von 500 ms gewährleisten gute Reaktionsfähigkeit ohne Überlastung.  
+- Für die PWM-Steuerung wurde eine Zykluszeit von **1–5 ms** als praxisgerecht ermittelt.  
+- Die Sicherheitsabschaltung erfolgt **zweikanalig (Fail-Safe-Prinzip)** mit direkter Hardware-Abschaltung.  
+- UI-Updates im **500 ms-Intervall** sichern gute Reaktionsfähigkeit bei geringer Prozessorlast.  
+- C++ auf STM32 bietet Echtzeit-Eignung und klare Trennung von Logik- und Hardware-Schichten.  
 
-Diese Ergebnisse flossen direkt in das Architektur- und Designkonzept ein.
+Diese Ergebnisse flossen direkt in Architektur- und Designentscheidungen ein.
 
+---
 
 ### Schritt 2: Architektur
 
-Nach der Recherche wurde die Softwarearchitektur des Systems festgelegt.  
-Das System wurde in fünf Hauptkomponenten gegliedert:
+Auf Basis der Recherche wurde die Softwarearchitektur in **fünf Hauptkomponenten** gegliedert:
 
-1. **MC – Motor-Controller**  
-   (Regelung, PWM-Ansteuerung)
-2. **UI – User-Interface-Service**  
-   (Anzeige, Eingabe, Presets)
-3. **SCU – Safety-Control-Unit**  
-   (Not-Halt, Sicherheitsüberwachung)
-4. **MS – Monitoring-Service**  
-   (Zustandsbewertung, Wartungslogik)
-5. **DM – Data-Management**  
-   (Logging, Export)
+1. **MCU – Main Control Unit**  
+   (Steuerungslogik, Zustandsmaschine, Zyklus 100 ms)  
+2. **UI – UserInterfaceService**  
+   (Anzeige, Eingabe Start/Stop/Soll-%)  
+3. **SI – SafetyInput**  
+   (Not-Halt, Sicherheitsüberwachung)  
+4. **MA – MotorActuator**  
+   (PWM-Ausgabe, Duty-Cycle-Umsetzung)  
+5. **DM – CsvLogger**  
+   (Protokollierung / Datenhaltung – nicht Teil von Sprint 1)
 
-Für Sprint 1 waren **MC**, **UI** und **SCU** relevant.  
-Das gewählte Architekturmuster folgt einer **komponentenbasierten Schichtenarchitektur**, bei der Logik- und 
-Darstellungsebene strikt getrennt sind.  
+Für Sprint 1 waren **MCU**, **UI** und **SI/MA** relevant.  
+Das gewählte Architekturmuster folgt einer **komponentenbasierten Schichtenarchitektur**, bei der Bedien-, Logik-
+und Hardwareebene klar getrennt sind.
 
-Das folgende Diagramm (separat abgelegt) visualisiert die Architektur und ihre Schnittstellen.
+Ein entsprechendes Komponentendiagramm (separat abgelegt) visualisiert Struktur und Schnittstellen.
 
+---
 
 ### Schritt 3: Design
 
-Im Anschluss wurde das Software-Design auf Klassenebene modelliert.  
+Im Anschluss wurde das Software-Design auf Klassenebene modelliert.
 Ziel war es, die in Sprint 1 relevanten Klassen und deren Interaktionen präzise darzustellen.
 
-Folgende zentrale Klassen wurden identifiziert:
+**Zentrale Klassen in Sprint 1:**
 
 | Komponente | Klasse | Aufgabe |
 |-------------|--------|---------|
-| **MC** | `MainControlUnit` | Regelung, Sollwertverarbeitung |
-| **MC** | `PWMManager` | PWM-Generierung und Duty-Cycle-Berechnung |
-| **UI** | `UserInterfaceService` | Bedienlogik, Anzeige der Drehzahl |
-| **UI** | `PresetManager` | Verwaltung von Drehzahl-Presets |
-| **SCU** | `EmergencyStopHandler` | Überwachung und Auslösung des Not-Halts |
-| **SCU** | `SafetySupervisor` | Sicherheitsüberwachung, Statusausgabe |
+| **MCU** | `MainControlUnit` | Hauptsteuerung, Koordination der Teilfunktionen |
+| **MCU** | `SetpointManager` | Umsetzung des Sollwerts (10 %-Schritte), Rampenfunktion |
+| **UI** | `UserInterfaceService` | Bedienlogik, Anzeige Soll-/Ist-Geschwindigkeit |
+| **MA** | `MotorActuator` | PWM-Ansteuerung des Schneidemotors |
+| **SI** | `SafetyInput` | Erfassung und Weitergabe des Not-Halt-Signals |
 
-Die Interaktion zwischen diesen Klassen wurde durch ein Sequenzdiagramm beschrieben, das die Abläufe von der 
-Benutzereingabe bis zur Motorregelung zeigt.  
-Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
+Ein Sequenzdiagramm zeigt den Ablauf von der **Benutzereingabe bis zur Motorsteuerung**,  
+ein Zustandsdiagramm illustriert die Übergänge **RUN ↔ STOP ↔ FAULT** sowie die Reaktion auf **Not-Halt**.
 
+---
 
 ### Schritt 4: Implementierung
 
@@ -101,5 +105,4 @@ Ein Zustandsdiagramm illustriert den Ablauf des Not-Halt-Prozesses.
 
 
 ### Schritt 6: Review & Retro
-
 
