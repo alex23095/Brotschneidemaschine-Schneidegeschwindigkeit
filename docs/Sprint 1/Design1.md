@@ -85,5 +85,3 @@ zwischen Systemteilen übersichtlich darzustellen, ohne den Fokus auf den zeitli
 ![Kommunikationsdiagramm](../referenziert/Design/Kommunikationsdiagramm.png)
 
 
-Jedes Muster adressiert dabei gezielt wiederkehrende Entwurfsprobleme innerhalb der Steuer- und UI-Architektur.
-
