@@ -1,44 +1,43 @@
-# Traceability-Matrix (erweitert)
+# Traceability-Matrix (aktuell – Brotschneidemaschine)
 
 | Requirement | Systemkomponente | Software-Design-Komponente | Sprint 1 | Status |
 |--------------|------------------|-----------------------------|-----------|--------|
-| **F1** | MC – Motor-Controller | `MainControlUnit`, `PWMManager` | x | Implementiert |
-| **F2** | UI – UserInterfaceService | `UserInterfaceService`, `PresetManager` | x | Implementiert |
-| **F3** | SM – Sensor | `SensorManager` | - | Geplant für Sprint 2 |
-| **F4** | MS – MonitoringService | `MonitoringService` | - | Abhängig von F3 |
-| **F5** | MS – MonitoringService | `MaintenanceAdvisor` | - | Später |
-| **F6** | UI – UserInterfaceService | `MenuController` | - | Später |
-| **F7** | DM – DataManagement | `LogManager` | - | Später |
-| **F8** | DM – DataManagement | `ExportService` | - | Später |
-| **F9** | SCU – SafetyControlUnit | `EmergencyStopHandler` | x | Basisfunktion aktiv |
-| **NF1** | SCU – SafetyControlUnit | `SafetySupervisor` | x | PL d eingehalten |
-| **NF2** | UI – UserInterfaceService | `UIEventLoop` | x | Reaktionszeit getestet |
-| **NF3** | SCU – SafetyControlUnit | `ReactionTimer` | x | gemessen / validiert |
-| **NF4** | UI – UserInterfaceService | `StatusDisplay` | - | folgt in Sprint 2 |
-| **NF5** | DM – DataManagement | `UsbHandler` | - | folgt später |
+| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | x | Implementiert |
+| **F2** | UI – UserInterfaceService | `UserInterfaceService` | x | Implementiert |
+| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | - | Geplant für Sprint 2 |
+| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | - | Abhängig von F3 |
+| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | - | Später |
+| **NF1** | MCU – Main Control Unit | `MainControlUnit` | x | Plattform STM32 / C++ |
+| **NF2** | UI – UserInterfaceService | `UserInterfaceService` | x | Reaktionszeit getestet (≤200 ms) |
+| **NF3** | MCU – Main Control Unit | `MainControlUnit` | x | Zykluszeit 100 ms validiert |
+| **NF4** | DM – CsvLogger | `CsvLogger` | - | Logging 1 Hz in Arbeit |
+| **NF5** | MCU – Main Control Unit | `Status` | - | Zustandstransparenz folgt in Sprint 2 |
 
+---
 
 ### Markierte Requirements für Sprint 1
 
 | Requirement | Kurzbeschreibung |
 |--------------|------------------|
-| **F1** | Motorsteuerung implementiert |
-| **F2** | Drehzahlsteuerung über UI |
-| **F9** | Not-Halt / Sicherheitsabschaltung |
-| **NF1** | Sicherheitsnorm (PL d) |
-| **NF2** | Reaktionszeit & Bedienbarkeit |
-| **NF3** | Sicherheitsreaktionszeit |
+| **F1** | Schneidemotor-Steuerung über Sollwert in 10 %-Stufen |
+| **F2** | Bedienung und Statusanzeige über UserInterface |
+| **NF1** | Implementierung in C++ auf STM32 (funktionsfähig) |
+| **NF2** | Reaktionszeit < 200 ms getestet |
+| **NF3** | Steuerungszyklus 100 ms validiert |
 
+---
 
 ### Ergänzung: Traceability SW-Design → Architekturkomponenten
 
 | Software-Design-Komponente | Zugehörige Systemkomponente | Beschreibung |
 |-----------------------------|-----------------------------|---------------|
-| `MainControlUnit` | MC – Motor-Controller | Regelung und Sollwertverarbeitung |
-| `PWMManager` | MC – Motor-Controller | PWM-Ausgabe, Sanftanlauf |
-| `UserInterfaceService` | UI – User-Interface | Anzeige und Eingabe |
-| `PresetManager` | UI – User-Interface | Drehzahl-Presets |
-| `EmergencyStopHandler` | SCU – Safety-Control | Reaktion auf Not-Halt |
-| `SafetySupervisor` | SCU – Safety-Control | Überwachung Sicherheitszustände |
-| `MonitoringService` | MS – Monitoring | Berechnung Restlebensdauer |
-| `LogManager` | DM – DataManagement | Aufzeichnung Betriebsdaten |
+| `MainControlUnit` | MCU – Steuerungslogik | Hauptsteuerung, Koordination aller Teilfunktionen |
+| `SetpointManager` | MCU – Steuerungslogik | Umsetzung Sollwert (10 %-Schritte), Rampensteuerung |
+| `UserInterfaceService` | UI – User Interface | Eingabe (Start/Stop/Soll%), Anzeige Status & Wartung |
+| `MotorActuator` | MA – Motorsteuerung | Umsetzung der Soll-Geschwindigkeit, Not-Halt |
+| `CurrentSensor` | CS – Strommessung | Erfassung Stromaufnahme (500 ms Intervall) |
+| `MonitoringService` | MON – Monitoring | Gleitmittelwertbildung (5 Messpunkte) |
+| `MaintenanceManager` | MNT – Wartungsmanagement | Laufzeitzählung, Wartungshinweis nach 48 h |
+| `CsvLogger` | DM – Datenmanagement | Protokollierung 1 Hz, Dateigrößenlimit 1 MB |
+| `FileDriver` | DM – Datenmanagement | Dateizugriff & Rollover-Verwaltung |
+| `SafetyInput` | SI – Safety | Erfassung Not-Halt (≤100 ms), Übergabe an MCU |
