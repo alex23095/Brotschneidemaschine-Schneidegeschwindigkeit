@@ -13,36 +13,72 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\00_mainControlUnit">
+      <UniqueIdentifier>{1106c342-e9bd-4742-92cd-1aeffb370d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\01_userInterfaceService">
+      <UniqueIdentifier>{7e70117a-6a15-48c0-9a8d-4f6a78733646}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\02_motorActuator">
+      <UniqueIdentifier>{93d724b1-8425-4d69-b975-737aa912e082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\03_safetyControlUnit">
+      <UniqueIdentifier>{0e745d18-5928-4944-9d47-63c743b40b9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\04_monitoringService">
+      <UniqueIdentifier>{acff7770-cec8-43ca-9960-46649396ac79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\05_dataManagement">
+      <UniqueIdentifier>{fd8a304e-fb33-48a8-a89d-6ab7643e66bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\00_mainControlUnit">
+      <UniqueIdentifier>{46108c90-fa20-4aaf-bc78-7766cb06807c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\01_userInterfaceService">
+      <UniqueIdentifier>{58bd28e0-7830-4ef1-8f4b-20d4799bf106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\02_motorActuator">
+      <UniqueIdentifier>{ef0a67bd-af63-4306-81a3-b85ce7dea639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\03_safetyControlUnit">
+      <UniqueIdentifier>{cdc57e15-b66d-4003-9038-0fc48c2aada3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\04_monitoringService">
+      <UniqueIdentifier>{fb58e963-0bcf-48af-88cc-e4fbbdce6a82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\05_dataManagement">
+      <UniqueIdentifier>{77a1c917-c602-493d-b27d-14a53c435f4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\00_mainControlUnit\mainControlUnit.hpp">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\00_mainControlUnit</Filter>
     </ClInclude>
     <ClInclude Include="src\02_motorActuator\motorActuator.hpp">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="src\02_motorActuator\setPointManager.hpp">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\02_motorActuator</Filter>
     </ClInclude>
     <ClInclude Include="src\03_safetyControlUnit\safetyInput.hpp">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\03_safetyControlUnit</Filter>
+    </ClInclude>
+    <ClInclude Include="src\02_motorActuator\setPointManager.hpp">
+      <Filter>Headerdateien\02_motorActuator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\00_mainControlUnit\mainControlUnit.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\02_motorActuator\motorActuator.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\02_motorActuator\setPointManager.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\03_safetyControlUnit\safetyInput.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\00_mainControlUnit\mainControlUnit.cpp">
+      <Filter>Quelldateien\00_mainControlUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\02_motorActuator\motorActuator.cpp">
+      <Filter>Quelldateien\02_motorActuator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\03_safetyControlUnit\safetyInput.cpp">
+      <Filter>Quelldateien\03_safetyControlUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\02_motorActuator\setPointManager.cpp">
+      <Filter>Quelldateien\02_motorActuator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
