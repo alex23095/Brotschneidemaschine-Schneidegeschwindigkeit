@@ -18,6 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\00_mainControlUnit\mainControlUnit.hpp" />
+    <ClInclude Include="src\02_motorActuator\motorActuator.hpp" />
+    <ClInclude Include="src\02_motorActuator\setPointManager.hpp" />
+    <ClInclude Include="src\03_safetyControlUnit\safetyInput.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\00_mainControlUnit\mainControlUnit.cpp" />
+    <ClCompile Include="src\02_motorActuator\motorActuator.cpp" />
+    <ClCompile Include="src\02_motorActuator\setPointManager.cpp" />
+    <ClCompile Include="src\03_safetyControlUnit\safetyInput.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -104,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,19 +141,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainControlUnit.cpp" />
-    <ClCompile Include="motorActuator.cpp" />
-    <ClCompile Include="safetyInput.cpp" />
-    <ClCompile Include="setPointManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="mainControlUnit.hpp" />
-    <ClInclude Include="motorActuator.hpp" />
-    <ClInclude Include="safetyInput.hpp" />
-    <ClInclude Include="setPointManager.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
