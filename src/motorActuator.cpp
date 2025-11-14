@@ -1,4 +1,4 @@
-// motorActuator.cpp
+﻿// motorActuator.cpp
 #include "motorActuator.hpp"
 
 namespace {
@@ -8,12 +8,12 @@ namespace {
 }
 
 MotorActuator::MotorActuator(int minRpm, int maxRpm)
-    : minRpm_{minRpm}
-    , maxRpm_{maxRpm}
-    , rpmCmd_{0}
-    , safetyOk_{false}
-    , enabled_{false}
-    , dutyCyclePercent_{0U}
+    : minRpm_{ minRpm }
+    , maxRpm_{ maxRpm }
+    , rpmCmd_{ 0 }
+    , safetyOk_{ false }
+    , enabled_{ false }
+    , dutyCyclePercent_{ 0U }
 {
     if (minRpm_ < 0) {
         minRpm_ = 0;
@@ -52,7 +52,7 @@ std::uint8_t MotorActuator::mapRpmToDuty(int rpm) const
     }
 
     const int rpmRange = maxRpm_ - minRpm_;
-    const int clamped  = clampRpm(rpm);
+    const int clamped = clampRpm(rpm);
 
     if (clamped <= 0) {
         return 0U;
@@ -60,7 +60,7 @@ std::uint8_t MotorActuator::mapRpmToDuty(int rpm) const
 
     // lineare Interpolation zwischen minRpm_ und maxRpm_
     int rpmOffset = clamped - minRpm_;      // 0..rpmRange
-    int span      = 100 - static_cast<int>(kMinDutyPercent); // verbleibender Duty-Bereich
+    int span = 100 - static_cast<int>(kMinDutyPercent); // verbleibender Duty-Bereich
 
     int duty = static_cast<int>(kMinDutyPercent) + (rpmOffset * span) / rpmRange;
 
@@ -88,11 +88,11 @@ void MotorActuator::update()
 {
     // Safety hat immer Priorität:
     if (!safetyOk_ || rpmCmd_ <= 0) {
-        enabled_          = false;
+        enabled_ = false;
         dutyCyclePercent_ = 0U;
         return;
     }
 
-    enabled_          = true;
+    enabled_ = true;
     dutyCyclePercent_ = mapRpmToDuty(rpmCmd_);
 }

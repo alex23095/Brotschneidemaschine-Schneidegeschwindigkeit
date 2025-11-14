@@ -1,14 +1,14 @@
-#include "SetpointManager.hpp"
+﻿#include "SetpointManager.hpp"
 
 SetpointManager::SetpointManager(int minRpm,
-                                 int maxRpm,
-                                 int rampRpmPerTick)
-    : minRpm_{minRpm}
-    , maxRpm_{maxRpm}
-    , rampRpmPerTick_{rampRpmPerTick}
-    , cmdStep10_{0}
-    , targetRpm_{0}
-    , currentRpm_{0}
+    int maxRpm,
+    int rampRpmPerTick)
+    : minRpm_{ minRpm }
+    , maxRpm_{ maxRpm }
+    , rampRpmPerTick_{ rampRpmPerTick }
+    , cmdStep10_{ 0 }
+    , targetRpm_{ 0 }
+    , currentRpm_{ 0 }
 {
     if (minRpm_ < 0) {
         minRpm_ = 0;
@@ -49,10 +49,10 @@ int SetpointManager::mapStepToRpm(int step) const
     // Linearverteilung von step 1..10 auf minRpm_..maxRpm_
     // (1 → minRpm_, 10 → maxRpm_)
     const int stepsRange = 9; // (10 - 1)
-    const int deltaRpm   = maxRpm_ - minRpm_;
+    const int deltaRpm = maxRpm_ - minRpm_;
 
     int index = step - 1; // 0..8
-    int rpm   = minRpm_ + (deltaRpm * index) / stepsRange;
+    int rpm = minRpm_ + (deltaRpm * index) / stepsRange;
 
     return rpm;
 }
@@ -74,7 +74,8 @@ void SetpointManager::update()
         if (currentRpm_ > targetRpm_) {
             currentRpm_ = targetRpm_;
         }
-    } else {
+    }
+    else {
         currentRpm_ -= rampRpmPerTick_;
         if (currentRpm_ < targetRpm_) {
             currentRpm_ = targetRpm_;

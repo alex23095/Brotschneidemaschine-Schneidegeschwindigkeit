@@ -4,9 +4,9 @@
 
 enum class SafetyState {
     NotReady,     // System noch nicht stabil gestartet
-    Safe,         // Alle Bedingungen fÃ¼r sicheren Betrieb erfÃ¼llt
-    EstopActive,  // Not-Halt betÃ¤tigt
-    GuardOpen,    // SchutztÃ¼r offen (oder Ã¤hnlicher Schutzkreis)
+    Safe,         // Alle Bedingungen für sicheren Betrieb erfüllt
+    EstopActive,  // Not-Halt betätigt
+    GuardOpen,    // Schutztür offen (oder ähnlicher Schutzkreis)
     Fault         // Logischer Fehler / inkonsistenter Zustand
 };
 
@@ -14,12 +14,12 @@ class SafetyInput {
 public:
     struct Inputs {
         bool estopNc;       // true = Not-Halt-Kreis geschlossen (NC-Kontakt OK)
-        bool guardDoorNc;   // true = SchutztÃ¼r-Kreis geschlossen (TÃ¼r zu)
-        bool safetyReset;   // true = Reset-Taster gedrÃ¼ckt (Momentanwert)
+        bool guardDoorNc;   // true = Schutztür-Kreis geschlossen (Tür zu)
+        bool safetyReset;   // true = Reset-Taster gedrückt (Momentanwert)
     };
 
     /// \param debounceTicks Anzahl aufeinanderfolgender identischer Messwerte,
-    ///                      bevor ein Zustand Ã¼bernommen wird.
+    ///                      bevor ein Zustand übernommen wird.
     explicit SafetyInput(std::uint32_t debounceTicks = 5U);
 
     /// Zyklischer Aufruf aus der Main Loop (z.B. alle 10 ms).
@@ -33,8 +33,8 @@ public:
 
     /// Convenience-Abfragen
     bool isEstopActive() const { return state_ == SafetyState::EstopActive; }
-    bool isGuardOpen()  const { return state_ == SafetyState::GuardOpen;  }
-    bool hasFault()     const { return state_ == SafetyState::Fault;      }
+    bool isGuardOpen()  const { return state_ == SafetyState::GuardOpen; }
+    bool hasFault()     const { return state_ == SafetyState::Fault; }
 
 private:
     std::uint32_t debounceTicks_;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <cstdint>
 
@@ -11,8 +11,8 @@ public:
     /// \param maxRpm          maximale Drehzahl (z.B. 3000 U/min)
     /// \param rampRpmPerTick  maximale Drehzahländerung pro update()-Aufruf
     SetpointManager(int minRpm = 500,
-                    int maxRpm = 3000,
-                    int rampRpmPerTick = 100);
+        int maxRpm = 3000,
+        int rampRpmPerTick = 100);
 
     /// Setzt den Sollwert in 10%-Schritten (0..10).
     /// 0 = Motor aus (0 U/min),

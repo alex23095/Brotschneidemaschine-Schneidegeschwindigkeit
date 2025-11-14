@@ -1,15 +1,13 @@
 #pragma once
-
 #include <cstdint>
-
-#include "SafetyInput.hpp"
-#include "SetpointManager.hpp"
+#include "safetyInput.hpp"
+#include "setPointManager.hpp"
 #include "motorActuator.hpp"
 
 /// MainControlUnit:
 /// - zentrale Steuerlogik
 /// - bindet SafetyInput, SetpointManager und MotorActuator zusammen
-/// - Singleton (eine globale Instanz f√ºr das System)
+/// - Singleton (eine globale Instanz f¸r das System)
 class MainControlUnit {
 public:
     /// Zugriff auf die Singleton-Instanz.
@@ -18,7 +16,7 @@ public:
     /// UI-Befehl: Schritt 0..10 (entspricht 0..100 % in 10%-Schritten).
     void setUiSpeedCommandStep(int step10);
 
-    /// Rohzust√§nde der Sicherheits-Eing√§nge (von HW-Ebene/GPIO).
+    /// Rohzust‰nde der Sicherheits-Eing‰nge (von HW-Ebene/GPIO).
     void setSafetyInputs(const SafetyInput::Inputs& in);
 
     /// Zyklische Steuerung (z.B. alle 10 ms aufrufen).
@@ -49,6 +47,6 @@ private:
     SetpointManager  setpointManager_;
     MotorActuator    motorActuator_;
 
-    // Letzte Roh-Safety-Eing√§nge
+    // Letzte Roh-Safety-Eing‰nge
     SafetyInput::Inputs pendingSafetyInputs_;
 };

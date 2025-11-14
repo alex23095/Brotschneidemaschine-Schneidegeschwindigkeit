@@ -4,7 +4,7 @@ namespace {
     SafetyInput::Inputs makeInitialInputs()
     {
         SafetyInput::Inputs in{};
-        in.estopNc     = false;
+        in.estopNc = false;
         in.guardDoorNc = false;
         in.safetyReset = false;
         return in;
@@ -12,26 +12,26 @@ namespace {
 }
 
 SafetyInput::SafetyInput(std::uint32_t debounceTicks)
-    : debounceTicks_{debounceTicks}
-    , stableCounter_{0U}
-    , lastRawInputs_{makeInitialInputs()}
-    , stableInputs_{makeInitialInputs()}
-    , state_{SafetyState::NotReady}
-    , latchedFault_{false}
+    : debounceTicks_{ debounceTicks }
+    , stableCounter_{ 0U }
+    , lastRawInputs_{ makeInitialInputs() }
+    , stableInputs_{ makeInitialInputs() }
+    , state_{ SafetyState::NotReady }
+    , latchedFault_{ false }
 {
 }
 
 bool SafetyInput::inputsEqual(const Inputs& a, const Inputs& b)
 {
-    return (a.estopNc     == b.estopNc) &&
-           (a.guardDoorNc == b.guardDoorNc) &&
-           (a.safetyReset == b.safetyReset);
+    return (a.estopNc == b.estopNc) &&
+        (a.guardDoorNc == b.guardDoorNc) &&
+        (a.safetyReset == b.safetyReset);
 }
 
 SafetyState SafetyInput::evaluate(const Inputs& in) const
 {
     // Grundlogik:
-    // - estopNc/guardDoorNc sind NC-Kontakte: false => Kreis geÃ¶ffnet => unsicher
+    // - estopNc/guardDoorNc sind NC-Kontakte: false => Kreis geöffnet => unsicher
     // - safetyReset darf den Motor NICHT direkt freigeben, sondern nur
     //   aus einem zuvor sicheren Zustand wieder "armen".
 
@@ -49,12 +49,13 @@ SafetyState SafetyInput::evaluate(const Inputs& in) const
 
 void SafetyInput::update(const Inputs& inputs)
 {
-    // Entprellen / StabilitÃ¤tsprÃ¼fung
+    // Entprellen / Stabilitätsprüfung
     if (inputsEqual(inputs, lastRawInputs_)) {
         if (stableCounter_ < debounceTicks_) {
             ++stableCounter_;
         }
-    } else {
+    }
+    else {
         stableCounter_ = 0U;
         lastRawInputs_ = inputs;
     }
@@ -62,7 +63,7 @@ void SafetyInput::update(const Inputs& inputs)
     if (stableCounter_ >= debounceTicks_) {
         stableInputs_ = lastRawInputs_;
 
-        // Nur wenn stabile EingÃ¤nge vorliegen, Zustand neu bewerten.
+        // Nur wenn stabile Eingänge vorliegen, Zustand neu bewerten.
         SafetyState newState = evaluate(stableInputs_);
 
         // Einfache Fehlerlogik: einmal erkannter Fault bleibt gelatcht.
@@ -71,7 +72,7 @@ void SafetyInput::update(const Inputs& inputs)
             return;
         }
 
-        // Hier kÃ¶nnten PlausibilitÃ¤tsprÃ¼fungen ergÃ¤nzt werden.
+        // Hier könnten Plausibilitätsprüfungen ergänzt werden.
         // Beispiel (nur als Platzhalter):
         // if (irgendwas_unlogisch) {
         //     latchedFault_ = true;

@@ -1,4 +1,4 @@
-#include "mainControlUnit.hpp"
+﻿#include "mainControlUnit.hpp"
 
 // Hier ggf. System-Timing kommentieren:
 // tick() wird z.B. alle 10 ms aufgerufen
@@ -11,13 +11,13 @@ MainControlUnit& MainControlUnit::instance()
 }
 
 MainControlUnit::MainControlUnit()
-    : safetyInput_{5U}                    // 5 Zyklen Entprellung
-    , setpointManager_{500, 3000, 100}    // 500..3000 U/min, Rampe 100 RPM / Tick
-    , motorActuator_{500, 3000}           // gleicher Bereich wie SetpointManager
+    : safetyInput_{ 5U }                    // 5 Zyklen Entprellung
+    , setpointManager_{ 500, 3000, 100 }    // 500..3000 U/min, Rampe 100 RPM / Tick
+    , motorActuator_{ 500, 3000 }           // gleicher Bereich wie SetpointManager
     , pendingSafetyInputs_{}
 {
     // Initialwerte der Safety-Eingänge: alle Kreise geöffnet/unsicher.
-    pendingSafetyInputs_.estopNc     = false;
+    pendingSafetyInputs_.estopNc = false;
     pendingSafetyInputs_.guardDoorNc = false;
     pendingSafetyInputs_.safetyReset = false;
 }
