@@ -19,18 +19,18 @@
 
 | Requirement ID | Requirement Beschreibung | Systemkomponente | Zugehörige Klassen | Schnittstellen / Methoden | Bearbeitung in Sprint |
 |----------------|--------------------------|------------------|--------------------|---------------------------|-----------------------|
-| F1 | Schneidemotor-Drehzahlregelung in Stufen, Start/Stop, Enable | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `updateControlLoop()`, `setSpeedStep()`, `getTargetRpm()`, `setDutyCycle()`, `enableMotor()`, `disableMotor()` | 1 |
-| F2 | Auswertung Sicherheitseingänge (Not-Halt, Haube, Freigabe) | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `isEmergencyStopActive()`, `isGuardClosed()`, `getSafetyStatus()`, `handleSafety()` | 1 |
-| F3 | Motorstrommessung, Überstrom-Erkennung | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `getFilteredCurrent()`, `updateMonitoring()`, `checkOvercurrent()` | - |
-| F4 | Wartungslogik basierend auf kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()`, `getRuntimeHours()` | - |
-| F5 | CSV-Logging von Betriebs- und Wartungsdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `logEvent()`, `rotateLogIfNeeded()`, `openFile()`, `writeLine()`, `closeFile()` | - |
-| NF1 | Reaktionszeit der Steuerung ≤ 200 ms | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `configureCycleTime()`, `getLastCycleTimeMs()` | 1 |
-| NF2 | Zyklisches Strom-Sampling alle 500 ms | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()`, `scheduleSampling()` | - |
-| NF3 | Regelgüte: Soll-/Ist-Abweichung ±5 % | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `computeControlOutput()`, `getMeasuredSpeed()`, `setDutyCycle()` | 1 |
-| NF4 | Wartungshinweis nach 48 h kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()`, `getMaintenanceAdvice()` | - |
-| NF5 | Log-Rollover bei Dateigröße ≥ 1 MB | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()`, `openFile()`, `closeFile()` | - |
-| NF6 | Implementierung in C++ auf STM32-Plattform | MCU / Compilerumgebung | gesamte Softwarearchitektur | `main()`, Initialisierungsfunktionen der Module (`init()`, `configureHardware()`) | 1 |
-| NF7 | Funktionsfähigkeit 0–45 °C Umgebung | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `readCurrent()`, `getStatus()`, Diagnose-/Fehler-Reporting-Methoden | - |
+| F1 | Schneidemotor-Drehzahlregelung in Stufen, Start/Stop, Enable | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 1 |
+| F2 | Auswertung Sicherheitseingänge (Not-Halt, Haube, Freigabe) | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 |
+| F3 | Motorstrommessung, Überstrom-Erkennung | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - |
+| F4 | Wartungslogik basierend auf kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - |
+| F5 | CSV-Logging von Betriebs- und Wartungsdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - |
+| NF1 | Reaktionszeit der Steuerung ≤ 200 ms | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 |
+| NF2 | Zyklisches Strom-Sampling alle 500 ms | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - |
+| NF3 | Regelgüte: Soll-/Ist-Abweichung ±5 % | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 |
+| NF4 | Wartungshinweis nach 48 h kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - |
+| NF5 | Log-Rollover bei Dateigröße ≥ 1 MB | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - |
+| NF6 | Implementierung in C++ auf STM32-Plattform | MCU / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | 1 |
+| NF7 | Funktionsfähigkeit 0–45 °C Umgebung | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - |
 
 
 ---
