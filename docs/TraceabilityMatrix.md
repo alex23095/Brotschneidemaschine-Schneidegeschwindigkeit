@@ -15,23 +15,22 @@
 | **NF6** | MCU / Compilerumgebung | gesamte Softwarearchitektur | x | Implementierung in C++ (STM32) |
 | **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | - | Funktion geprüft bei 0–45 °C Umgebung |
 
-# Traceability-Matrix
+# Traceability-Matrix (erweitert nach Sprint 1)
 
-| Requirement ID | Requirement Beschreibung | Systemkomponente | Zugehörige Klassen | Schnittstellen / Methoden | Bearbeitung in Sprint |
-|----------------|--------------------------|------------------|--------------------|---------------------------|-----------------------|
-| F1 | Schneidemotor-Drehzahlregelung in Stufen, Start/Stop, Enable | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 1 |
-| F2 | Auswertung Sicherheitseingänge (Not-Halt, Haube, Freigabe) | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 |
-| F3 | Motorstrommessung, Überstrom-Erkennung | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - |
-| F4 | Wartungslogik basierend auf kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - |
-| F5 | CSV-Logging von Betriebs- und Wartungsdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - |
-| NF1 | Reaktionszeit der Steuerung ≤ 200 ms | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 |
-| NF2 | Zyklisches Strom-Sampling alle 500 ms | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - |
-| NF3 | Regelgüte: Soll-/Ist-Abweichung ±5 % | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 |
-| NF4 | Wartungshinweis nach 48 h kumulierter Laufzeit | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - |
-| NF5 | Log-Rollover bei Dateigröße ≥ 1 MB | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - |
-| NF6 | Implementierung in C++ auf STM32-Plattform | MCU / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | 1 |
-| NF7 | Funktionsfähigkeit 0–45 °C Umgebung | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - |
-
+| Requirement | Systemkomponente | Software-Design-Komponente | Schnittstellen / Methoden | Sprint 1 | Umsetzungsstand nach Sprint 1 | Status |
+|-------------|------------------|-----------------------------|---------------------------|----------|-------------------------------|--------|
+| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | ✓ | Basissteuerung implementiert (Grund-Sollwert + Motoransteuerung) | Erfüllt (Basis) |
+| **F2** | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | ✓ | SafetyInput angebunden, Freigabelogik aktiv | Erfüllt (Basis) |
+| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - | Sensorlogik vorbereitet, aber nicht umgesetzt | Offen |
+| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - | Keine Laufzeitlogik implementiert | Offen |
+| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - | Logging nicht begonnen | Offen |
+| **NF1** | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | ✓ | Reaktionszeit strukturell erreicht | Teilweise erfüllt |
+| **NF2** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - | Sampling nicht vorhanden | Offen |
+| **NF3** | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | ✓ | Reglerschleife grundsätzlich angelegt | Teilweise erfüllt |
+| **NF4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - | Kein Laufzeit-Counter vorhanden | Offen |
+| **NF5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - | Kein Log-Rollover umgesetzt | Offen |
+| **NF6** | Gesamtsystem / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | ✓ | C++/STM32 erfolgreich umgesetzt | Erfüllt |
+| **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - | Keine End-zu-End-Tests möglich | Offen |
 
 ---
 
