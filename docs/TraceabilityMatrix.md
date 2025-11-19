@@ -1,36 +1,19 @@
-# Traceability-Matrix 
+# Traceability-Matrix (erweitert nach Sprint 1 + Testfälle)
 
-| Requirement | Systemkomponente | Software-Design-Komponente | Sprint 1 | Status |
-|--------------|------------------|-----------------------------|-----------|--------|
-| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | x | Implementiert |
-| **F2** | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | x | Implementiert |
-| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | - | Geplant für Sprint 2 |
-| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | - | Abhängig von F3 |
-| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | - | Später |
-| **NF1** | MCU – Main Control Unit | `MainControlUnit` | x | Reaktionszeit ≤ 200 ms validiert |
-| **NF2** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | - | Zyklisches Sampling 500 ms |
-| **NF3** | MCU / MA | `MainControlUnit`, `MotorActuator` | - | Soll-/Ist-Abweichung ±5 % |
-| **NF4** | MNT – MaintenanceManager | `MaintenanceManager` | - | Wartungshinweis nach 48 h Laufzeit |
-| **NF5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | - | Rollover bei 1 MB getestet |
-| **NF6** | MCU / Compilerumgebung | gesamte Softwarearchitektur | x | Implementierung in C++ (STM32) |
-| **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | - | Funktion geprüft bei 0–45 °C Umgebung |
-
-# Traceability-Matrix (erweitert nach Sprint 1)
-
-| Requirement | Systemkomponente | Software-Design-Komponente | Schnittstellen / Methoden | Sprint 1 | Umsetzungsstand nach Sprint 1 | Status |
-|-------------|------------------|-----------------------------|---------------------------|----------|-------------------------------|--------|
-| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | ✓ | Basissteuerung implementiert (Grund-Sollwert + Motoransteuerung) | Erfüllt (Basis) |
-| **F2** | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | ✓ | SafetyInput angebunden, Freigabelogik aktiv | Erfüllt (Basis) |
-| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - | Sensorlogik vorbereitet, aber nicht umgesetzt | Offen |
-| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - | Keine Laufzeitlogik implementiert | Offen |
-| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - | Logging nicht begonnen | Offen |
-| **NF1** | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | ✓ | Reaktionszeit strukturell erreicht | Teilweise erfüllt |
-| **NF2** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - | Sampling nicht vorhanden | Offen |
-| **NF3** | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | ✓ | Reglerschleife grundsätzlich angelegt | Teilweise erfüllt |
-| **NF4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - | Kein Laufzeit-Counter vorhanden | Offen |
-| **NF5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - | Kein Log-Rollover umgesetzt | Offen |
-| **NF6** | Gesamtsystem / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | ✓ | C++/STM32 erfolgreich umgesetzt | Erfüllt |
-| **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - | Keine End-zu-End-Tests möglich | Offen |
+| Requirement | Systemkomponente | Software-Design-Komponente | Schnittstellen / Methoden | Sprint 1 | Testfälle Sprint 1 | Umsetzungsstand nach Sprint 1 | Status |
+|-------------|------------------|-----------------------------|---------------------------|----------|--------------------|-------------------------------|--------|
+| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | ✓ | TC-I2, TC-I3 | Basissteuerung implementiert (Grund-Sollwert + Motoransteuerung) | Erfüllt (Basis) |
+| **F2** | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | ✓ | TC-M1, TC-M2, TC-I1, TC-I3 | SafetyInput angebunden, Freigabelogik aktiv | Erfüllt (Basis) |
+| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - | — | Sensorlogik vorbereitet, aber nicht umgesetzt | Offen |
+| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - | — | Keine Laufzeitlogik implementiert | Offen |
+| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - | — | Logging nicht begonnen | Offen |
+| **NF1** | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | ✓ | TC-I3 | Reaktionszeit strukturell erreicht | Teilweise erfüllt |
+| **NF2** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - | — | Sampling nicht vorhanden | Offen |
+| **NF3** | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | ✓ | TC-I2 | Reglerschleife grundsätzlich angelegt | Teilweise erfüllt |
+| **NF4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - | — | Kein Laufzeit-Counter vorhanden | Offen |
+| **NF5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - | — | Kein Log-Rollover umgesetzt | Offen |
+| **NF6** | Gesamtsystem / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | ✓ | TC-I3 | C++/STM32 erfolgreich umgesetzt | Erfüllt |
+| **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - | — | Keine End-zu-End-Tests möglich | Offen |
 
 ---
 
@@ -42,6 +25,19 @@
 | **F2** | Safety-Not-Halt mit Reaktionszeit < 100 ms |
 | **NF1** | Bedienreaktionszeit ≤ 200 ms validiert |
 | **NF6** | C++-Implementierung auf STM32 lauffähig |
+
+---
+
+### Testfälle Sprint 1
+
+| Test-ID | Kurzbeschreibung |
+|---------|------------------|
+| **TC-M1** | Prüfung negativer bzw. ungültiger Speed-Werte im SafetyInput |
+| **TC-M2** | Prüfung des oberen Grenzwerts im SafetyInput |
+| **TC-M3** | Rampenfunktion: Berechnung des nächsten Sollwertschritts |
+| **TC-I1** | SafetyInput → SetpointManager: Validierung und Weitergabe |
+| **TC-I2** | SetpointManager → MotorActuator: Übergabe des Sollwerts |
+| **TC-I3** | MainControlUnit übernimmt gültigen Eingabewert korrekt |
 
 ---
 
