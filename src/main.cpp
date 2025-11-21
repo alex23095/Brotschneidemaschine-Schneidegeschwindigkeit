@@ -1,11 +1,5 @@
 ﻿#include "mainControlUnit.hpp"
 
-void init()
-{
-    // Platzhalter für spätere Initialisierungsschritte
-    (void)MainControlUnit::instance();
-}
-
 // dein vorhandener Tick
 int mainLoopTick()
 {
@@ -26,7 +20,11 @@ int mainLoopTick()
 // echte Programmeinstiegstelle
 int main()
 {
-    init();
+    auto& mcu = MainControlUnit::instance();
+
+    // Optionaler Selbsttest vor dem Start
+    mcu.runSelfTest();
+
     while (true)
     {
         mainLoopTick();

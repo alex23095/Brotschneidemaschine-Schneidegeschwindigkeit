@@ -1,5 +1,4 @@
 #pragma once
-#include <chrono>
 #include <cstdint>
 #include "safetyInput.hpp"
 #include "setPointManager.hpp"
@@ -15,37 +14,47 @@ public:
     static MainControlUnit& instance();
 
     /// UI-Befehl: Schritt 0..10 (entspricht 0..100 % in 10%-Schritten).
-    void setSpeedStep(int step10);
+    void setUiSpeedCommandStep(int step10);
+
+    /// Alias für Traceability: entspricht setUiSpeedCommandStep().
+    void setSpeedStep(int step10) { setUiSpeedCommandStep(step10); }
+
+    /// Direkte Vorgabe eines Duty-Cycle-Werts (0..100 %).
+    void setDutyCycle(std::uint8_t dutyPercent);
 
     /// Rohzustände der Sicherheits-Eingänge (von HW-Ebene/GPIO).
-    void readInputs(const SafetyInput::Inputs& in);
+    void setSafetyInputs(const SafetyInput::Inputs& in);
+
+    /// Alias für Traceability: entspricht setSafetyInputs() und verarbeitet die Werte direkt.
+    void readInputs(const SafetyInput::Inputs& in) { setSafetyInputs(in); safetyInput_.update(in); }
 
     /// Zyklische Steuerung (z.B. alle 10 ms aufrufen).
+    void tick();
+
+    /// Sprint-1-kompatible Bezeichnung für die Zyklusausführung.
     void executeCycle();
 
-    /// Manuelles Setzen des Duty-Cycle (z.B. für Testzwecke).
-    void setDutyCycle(std::uint8_t dutyPercent);
+    /// Laufzeitmessung des letzten Zyklus in Millisekunden.
+    std::uint32_t getLastCycleTimeMs() const { return lastCycleTimeMs_; }
 
     /// Monitoring / Debug-Informationen:
     int currentSetpointRpm() const { return setpointManager_.currentSetpointRpm(); }
     int targetSetpointRpm() const { return setpointManager_.targetSetpointRpm(); }
 
-    bool isMotorEnabled() const { return motorActuator_.isEnabled(); }
-    std::uint8_t dutyCyclePercent() const { return motorActuator_.dutyCyclePercent(); }
-
-    /// Ergebnis der Sicherheitsbewertung.
+    /// Sicherheitsstatus abrufen (Traceability-Alias zu safetyState()).
     SafetyState getSafetyStatus() const { return safetyInput_.state(); }
 
-    /// Dauer des letzten executeCycle-Aufrufs in Millisekunden.
-    std::uint32_t getLastCycleTimeMs() const { return lastCycleTimeMs_; }
+    bool isMotorEnabled() const { return motorActuator_.isEnabled(); }
+    std::uint8_t dutyCyclePercent() const { return motorActuator_.dutyCyclePercent(); }
 
     SafetyState safetyState() const { return safetyInput_.state(); }
     bool isSafetyOk() const { return safetyInput_.isSafetyOk(); }
 
-    // Legacy-Kompatibilität für bestehenden Aufrufcode
-    void setUiSpeedCommandStep(int step10) { setSpeedStep(step10); }
-    void setSafetyInputs(const SafetyInput::Inputs& in) { readInputs(in); }
-    void tick() { executeCycle(); }
+    /// Selbsttest beim Start ausführen.
+    bool runSelfTest();
+
+    /// Gesamtstatus für Diagnose / Traceability.
+    bool getStatus() const { return selfTestPassed_ && isSafetyOk(); }
 
 private:
     // Singleton: Konstruktor privat
@@ -65,7 +74,9 @@ private:
     // Letzte Roh-Safety-Eingänge
     SafetyInput::Inputs pendingSafetyInputs_;
 
-    // Zykluszeit-Messung
+    // Laufzeitmessung
     std::uint32_t lastCycleTimeMs_;
-    std::chrono::steady_clock::time_point lastCycleTimestamp_;
+
+    // Selbsttest-Ergebnis
+    bool selfTestPassed_;
 };

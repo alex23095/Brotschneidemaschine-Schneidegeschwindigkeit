@@ -6,7 +6,7 @@ enum class SafetyState {
     NotReady,     // System noch nicht stabil gestartet
     Safe,         // Alle Bedingungen für sicheren Betrieb erfüllt
     EstopActive,  // Not-Halt betätigt
-    GuardOpen,    // Schutztür offen (oder ähnlicher Schutzkreis)
+    GuardOpen,    // Schutztr offen (oder ähnlicher Schutzkreis)
     Fault         // Logischer Fehler / inkonsistenter Zustand
 };
 
@@ -14,7 +14,7 @@ class SafetyInput {
 public:
     struct Inputs {
         bool estopNc;       // true = Not-Halt-Kreis geschlossen (NC-Kontakt OK)
-        bool guardDoorNc;   // true = Schutztür-Kreis geschlossen (Tür zu)
+        bool guardDoorNc;   // true = Schutztr-Kreis geschlossen (Tr zu)
         bool safetyReset;   // true = Reset-Taster gedrückt (Momentanwert)
     };
 
@@ -25,17 +25,17 @@ public:
     /// Zyklischer Aufruf aus der Main Loop (z.B. alle 10 ms).
     void update(const Inputs& inputs);
 
-    /// Alias für Traceability-Matrix: Eingangswerte übernehmen.
+    /// Alias für Traceability: entspricht update().
     void readInputs(const Inputs& inputs) { update(inputs); }
 
     /// true, wenn Motor freigegeben werden darf.
     bool isSafetyOk() const;
 
-    /// Abfrage des aktuellen Sicherheitszustands.
-    SafetyState getSafetyStatus() const { return state_; }
-
     /// Detaillierter Sicherheitszustand.
     SafetyState state() const { return state_; }
+
+    /// Traceability-Alias für den Sicherheitszustand.
+    SafetyState getSafetyStatus() const { return state_; }
 
     /// Convenience-Abfragen
     bool isEstopActive() const { return state_ == SafetyState::EstopActive; }

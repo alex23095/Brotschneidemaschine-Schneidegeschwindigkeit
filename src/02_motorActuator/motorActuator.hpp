@@ -22,10 +22,13 @@ public:
 
     /// Zyklischer Aufruf aus der MainControlUnit.
     /// Berechnet Enable-Flag und Duty-Cycle.
-    void updateControlLoop();
+    void update();
 
-    /// Duty-Cycle manuell vorgeben (z.B. für Tests oder alternative Steuerung).
-    void setDutyCycle(std::uint8_t dutyPercent);
+    /// Alias für Traceability: entspricht update().
+    void updateControlLoop() { update(); }
+
+    /// Direkte Vorgabe eines Duty-Cycle-Werts (0..100 %). Überschreibt den aus RPM berechneten Wert.
+    void setManualDutyCycle(std::uint8_t dutyPercent);
 
     /// true, wenn Motor energiert werden darf.
     bool isEnabled() const { return enabled_; }
@@ -36,8 +39,8 @@ public:
     /// Intern verwendeter, geklemmter Drehzahlsollwert.
     int commandRpm() const { return rpmCmd_; }
 
-    /// Rückmeldung der aktuell angenommenen Drehzahl.
-    int getMeasuredSpeed() const;
+    /// Alias für Traceability: gibt den aktuellen (geklemmten) RPM-Wert zurück.
+    int getMeasuredSpeed() const { return rpmCmd_; }
 
 private:
     int         minRpm_;
@@ -48,7 +51,9 @@ private:
     bool        enabled_;           // ergibt sich aus rpmCmd_ & safetyOk_
     std::uint8_t dutyCyclePercent_; // 0..100
 
+    bool         manualDutyActive_;
+    std::uint8_t manualDutyPercent_;
+
     int clampRpm(int rpm) const;
     std::uint8_t mapRpmToDuty(int rpm) const;
-    std::uint8_t clampDuty(std::uint8_t duty) const;
 };
