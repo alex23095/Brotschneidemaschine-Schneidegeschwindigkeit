@@ -66,20 +66,23 @@ _Ebenenübersicht_:
 
 ## Schnittstellendefinition
 
-| **Quelle**             | **Ziel**                | **Schnittstelle / Aufruf**                                               | **Zweck**                                      |
-|------------------------|-------------------------|---------------------------------------------------------------------------|-----------------------------------------------|
-| `UserInterfaceService` | `MainControlUnit`       | `setSpeedPercent(step10)`                                                 | Übermittlung neuer Sollwertvorgabe (10 %-Stufe) |
-| `MainControlUnit`      | `MotorActuator`         | `setSpeed(rpmTarget)` / `stopEmergency()`                                 | Weitergabe Sollwert bzw. sofortiger Stop       |
-| `MotorActuator`        | `MainControlUnit`       | `confirmSpeedSet()` / `stopped()`                                         | Rückmeldung Motorzustand                      |
-| `MainControlUnit`      | `SafetyInput`           | `readSafetyStatus()`                                                      | Abfrage Not-Halt-Status                       |
-| `SafetyInput`          | `MainControlUnit`       | `reportTripCondition(status = TRIPPED)`                                   | Signalisiert Not-Halt an Logik                |
-| `MainControlUnit`      | `CurrentSensor`         | `readCurrent()`                                                           | Anforderung Messwert                          |
-| `CurrentSensor`        | `MainControlUnit`       | `returnSample(meanCurrent)`                                               | Rückgabe Mittelwert                           |
-| `MainControlUnit`      | `MaintenanceManager`    | `updateRuntime(deltaTime)`                                                | Übermittlung der Betriebszeit                 |
-| `MaintenanceManager`   | `MainControlUnit`       | `maintenanceDue()`                                                        | Signal für fällige Wartung                    |
-| `MainControlUnit`      | `CsvLogger`             | `logEvent(eventType, payload)`                                            | Ereignis-Logging                              |
-| `CsvLogger`            | `FileDriver`            | `writeCSV(fileName, data)`                                                | Speichern von Logdaten                        |
-| `MainControlUnit`      | `UserInterfaceService`  | `updateDisplay(status)` / `showPopup(msg)`                                | Rückmeldung aktueller Systemzustand           |
+| **Quelle**             | **Ziel**                | **Schnittstelle / Aufruf**                         | **Zweck**                                      |
+|------------------------|-------------------------|-----------------------------------------------------|-----------------------------------------------|
+| UserInterfaceService   | MainControlUnit         | `setSpeedPercent(step10)`                          | Übergabe einer neuen Sollwertvorgabe (10%-Stufen) |
+| UserInterfaceService   | MainControlUnit         | `requestStart()` / `requestStop()`                 | Bedienbefehle für Start/Stop                  |
+| MainControlUnit        | UserInterfaceService     | `updateDisplay(status, rpmSet, rpmActual)`         | UI-Update zu Systemstatus und Werten          |
+| MainControlUnit        | SetpointManager         | `setTarget(step10)`                                | Übergabe der Ziel-Sollwertstufe               |
+| SetpointManager        | MainControlUnit         | `getCurrentSetpoint()`                             | Rückgabe des aufbereiteten Sollwerts          |
+| MainControlUnit        | SafetyInput             | `readSafetyStatus()`                               | Abfrage Not-Halt-Zustand                      |
+| SafetyInput            | MainControlUnit         | `onSafetyTrip()`                                   | Sofortiges Melden einer Not-Halt-Auslösung     |
+| MainControlUnit        | MotorActuator           | `setSpeed(rpmTarget)`                              | Übergabe des Soll-Drehwerts an Motor          |
+| MainControlUnit        | MotorActuator           | `stopEmergency()`                                  | Sofortstop bei Not-Halt                       |
+| MotorActuator          | MainControlUnit         | `feedbackMotorState(state)`                        | Rückmeldung über Motorzustand                 |
+| MainControlUnit        | CurrentSensor           | `requestCurrent()`                                 | Anforderung eines Strommesswerts              |
+| CurrentSensor          | MainControlUnit         | `deliverCurrent(meanValue)`                        | Rückgabe des Mittelwerts über 5 Messpunkte    |
+| MainControlUnit        | PersistenceManager      | `logEvent(eventType, payload)`                     | Protokollierung von Systemereignissen         |
+| MainControlUnit        | PersistenceManager      | `updateRuntime(deltaTime)`                         | Übergabe der Betriebszeit an Wartungslogik     |
+| PersistenceManager     | MainControlUnit         | `maintenanceDue()`                                 | Signalisiert anstehende Wartung               |
 
 ---
 
@@ -97,9 +100,16 @@ _Ebenenübersicht_:
 | **Codeanalyse**          | cppcheck / SonarLint                          | Analyse von Speicherzugriff, Laufzeitfehlern, Komplexität                                         |
 | **Target / Deployment**  | STM32-Board (Simulation optional via Serial)  | Reale Ausführung und Test der Steuerlogik                                                          |
 
-**Hinweis zu Abhängigkeiten:**
+## Hinweis zu Abhängigkeiten
 
-- `UserInterfaceService` kommuniziert nur mit der `MainControlUnit`.
-- `MainControlUnit` koordiniert alle anderen Komponenten (Motor, Safety, Sensorik, Logging).
-- Hardware-Module (`MotorActuator`, `CurrentSensor`, `SafetyInput`) sind vollständig gekapselt.  
-- Logging erfolgt zentral über `CsvLogger`, der über `FileDriver` schreibt.
+- **UserInterfaceService** kommuniziert ausschließlich mit der **MainControlUnit** und sendet Bedienbefehle (Start/Stop, Not-Halt, Geschwindigkeitsstufen) sowie erhält Status- und Wartungsmeldungen.
+- **MainControlUnit** ist die zentrale Steuer- und Koordinationsinstanz des Systems. Sie verbindet alle weiteren Komponenten:
+  - SetpointManager  
+  - MotorActuator  
+  - SafetyInput  
+  - CurrentSensor  
+  - PersistenceManager
+- Die Hardware-nahen Module (**MotorActuator**, **CurrentSensor**, **SafetyInput**) sind vollständig gekapselt und werden ausschließlich über definierte Schnittstellen von der MainControlUnit angesteuert.
+- Alle Aufgaben zur Datenpersistenz, Protokollierung und Wartungsverwaltung werden zentral durch den **PersistenceManager** ausgeführt.  
+  Dieser übernimmt intern das CSV-Logging, die Dateiverwaltung sowie die Laufzeit- und Wartungsdatenspeicherung.
+
