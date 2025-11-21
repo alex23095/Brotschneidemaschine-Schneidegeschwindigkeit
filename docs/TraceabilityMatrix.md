@@ -1,19 +1,20 @@
-# Traceability-Matrix (erweitert nach Sprint 1 + Testfälle)
+# Traceability-Matrix (farbig + „bestanden“)
 
-| Requirement | Systemkomponente | Software-Design-Komponente | Schnittstellen / Methoden | Sprint 1 | Testfälle Sprint 1 | Umsetzungsstand nach Sprint 1 | Status |
-|-------------|------------------|-----------------------------|---------------------------|----------|--------------------|-------------------------------|--------|
-| **F1** | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | ✓ | TC-I2, TC-I3 | Basissteuerung implementiert (Grund-Sollwert + Motoransteuerung) | Erfüllt (Basis) |
-| **F2** | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | ✓ | TC-M1, TC-M2, TC-I1, TC-I3 | SafetyInput angebunden, Freigabelogik aktiv | Erfüllt (Basis) |
-| **F3** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | - | — | Sensorlogik vorbereitet, aber nicht umgesetzt | Offen |
-| **F4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | - | — | Keine Laufzeitlogik implementiert | Offen |
-| **F5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | - | — | Logging nicht begonnen | Offen |
-| **NF1** | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | ✓ | TC-I3 | Reaktionszeit strukturell erreicht | Teilweise erfüllt |
-| **NF2** | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | - | — | Sampling nicht vorhanden | Offen |
-| **NF3** | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | ✓ | TC-I2 | Reglerschleife grundsätzlich angelegt | Teilweise erfüllt |
-| **NF4** | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | - | — | Kein Laufzeit-Counter vorhanden | Offen |
-| **NF5** | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | - | — | Kein Log-Rollover umgesetzt | Offen |
-| **NF6** | Gesamtsystem / Compilerumgebung | gesamte Softwarearchitektur | `main()`, `init()` | ✓ | TC-I3 | C++/STM32 erfolgreich umgesetzt | Erfüllt |
-| **NF7** | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | - | — | Keine End-zu-End-Tests möglich | Offen |
+| **Req-ID** | **Beschreibung** | **Systemkomponente** | **Zugehörige Klassen** | **Methoden / Schnittstellen** | **Sprint** | **Implementierung** | **Testfälle** |
+|-----------|------------------|----------------------|-------------------------|-------------------------------|------------|----------------------|----------------|
+| **F1** | Grundsteuerung Motor & Sollwertverarbeitung | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()` | 1 | 🟢 Implementiert (Basis) | TC-I2 🟢 (bestanden), TC-I3 🟢 (bestanden) |
+| **F2** | Sicherheitsfreigabe & Eingangserfassung | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 | 🟢 Implementiert (Basis) | TC-M1 🟢 (bestanden), TC-M2 🟢 (bestanden), TC-I1 🟢 (bestanden), TC-I3 🟢 (bestanden) |
+| **F3** | Strommessung & Überstromdetektion | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | – | 🔴 Nicht implementiert | — |
+| **F4** | Wartungslogik (Betriebszeit, Hinweis) | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | – | 🔴 Nicht implementiert | — |
+| **F5** | Logging von Status & Messdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | – | 🔴 Nicht implementiert | — |
+| **NF1** | Reaktionszeit der Zyklussteuerung | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 | 🟡 Teilweise implementiert | TC-I3 🟢 (bestanden) |
+| **NF2** | Messintervall Stromsensor | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | – | 🔴 Nicht implementiert | — |
+| **NF3** | Stabilität / Regelqualität Motorsteuerung | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 | 🟡 Teilweise implementiert | TC-I2 🟢 (bestanden) |
+| **NF4** | Wartungszeit-Zähler zuverlässig führen | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | – | 🔴 Nicht implementiert | — |
+| **NF5** | Dateigröße & Log-Rollover | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | – | 🔴 Nicht implementiert | — |
+| **NF6** | Kompilierbarkeit & Portabilität | Gesamtsystem / Build | gesamte Architektur | `main()`, `init()` | 1 | 🟢 Implementiert | TC-I3 🟢 (bestanden) |
+| **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | – | 🔴 Nicht implementiert | — |
+
 
 ---
 
