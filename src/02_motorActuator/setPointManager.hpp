@@ -19,6 +19,9 @@ public:
     /// 1..10 = 10..100% → 500..3000 U/min.
     void setCommandStep(int step10);
 
+    /// Traceability-Matrix-kompatibler Alias.
+    void setSpeedStep(int step10) { setCommandStep(step10); }
+
     /// Liefert den aktuell gesetzten Schritt (0..10).
     int commandStep() const { return cmdStep10_; }
 

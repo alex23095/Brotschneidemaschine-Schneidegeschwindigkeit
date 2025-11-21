@@ -1,4 +1,4 @@
-#include "SafetyInput.hpp"
+#include "safetyInput.hpp"
 
 namespace {
     SafetyInput::Inputs makeInitialInputs()

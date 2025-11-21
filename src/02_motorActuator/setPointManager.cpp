@@ -1,4 +1,4 @@
-﻿#include "SetpointManager.hpp"
+﻿#include "setpointManager.hpp"
 
 SetpointManager::SetpointManager(int minRpm,
     int maxRpm,

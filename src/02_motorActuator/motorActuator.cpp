@@ -37,6 +37,11 @@ int MotorActuator::clampRpm(int rpm) const
     return rpm;
 }
 
+std::uint8_t MotorActuator::clampDuty(std::uint8_t duty) const
+{
+    return duty > 100U ? 100U : duty;
+}
+
 std::uint8_t MotorActuator::mapRpmToDuty(int rpm) const
 {
     // rpm = 0       → 0 %
@@ -79,12 +84,39 @@ void MotorActuator::setCommandRpm(int rpm)
     rpmCmd_ = clampRpm(rpm);
 }
 
+void MotorActuator::setDutyCycle(std::uint8_t dutyPercent)
+{
+    dutyCyclePercent_ = clampDuty(dutyPercent);
+    enabled_ = safetyOk_ && dutyCyclePercent_ > 0U;
+
+    if (!enabled_) {
+        rpmCmd_ = 0;
+        return;
+    }
+
+    const int span = maxRpm_ - minRpm_;
+    if (span <= 0) {
+        rpmCmd_ = maxRpm_;
+        return;
+    }
+
+    const int effectiveDuty = static_cast<int>(dutyCyclePercent_);
+    if (effectiveDuty <= static_cast<int>(kMinDutyPercent)) {
+        rpmCmd_ = minRpm_;
+        return;
+    }
+
+    const int dutyRange = 100 - static_cast<int>(kMinDutyPercent);
+    const int dutyOffset = effectiveDuty - static_cast<int>(kMinDutyPercent);
+    rpmCmd_ = clampRpm(minRpm_ + (span * dutyOffset) / dutyRange);
+}
+
 void MotorActuator::setSafetyOk(bool ok)
 {
     safetyOk_ = ok;
 }
 
-void MotorActuator::update()
+void MotorActuator::updateControlLoop()
 {
     // Safety hat immer Priorität:
     if (!safetyOk_ || rpmCmd_ <= 0) {
@@ -95,4 +127,9 @@ void MotorActuator::update()
 
     enabled_ = true;
     dutyCyclePercent_ = mapRpmToDuty(rpmCmd_);
+}
+
+int MotorActuator::getMeasuredSpeed() const
+{
+    return enabled_ ? rpmCmd_ : 0;
 }

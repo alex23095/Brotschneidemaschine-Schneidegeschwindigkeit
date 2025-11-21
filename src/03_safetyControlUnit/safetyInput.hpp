@@ -25,8 +25,14 @@ public:
     /// Zyklischer Aufruf aus der Main Loop (z.B. alle 10 ms).
     void update(const Inputs& inputs);
 
+    /// Alias für Traceability-Matrix: Eingangswerte übernehmen.
+    void readInputs(const Inputs& inputs) { update(inputs); }
+
     /// true, wenn Motor freigegeben werden darf.
     bool isSafetyOk() const;
+
+    /// Abfrage des aktuellen Sicherheitszustands.
+    SafetyState getSafetyStatus() const { return state_; }
 
     /// Detaillierter Sicherheitszustand.
     SafetyState state() const { return state_; }
