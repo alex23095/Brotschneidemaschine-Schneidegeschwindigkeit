@@ -28,38 +28,25 @@ _Ebenenübersicht_:
 
 ![Komponentendiagramm](../referenziert/Architektur/Komponentendiagramm.png)
 
----
+## Zuordnung der Requirements zu den Architektur-Schichten
 
-### Komponentenübersicht
-
-| **Komponente**              | **Requirements**                  | **Beschreibung / Zweck**                                                    |
-|-----------------------------|-----------------------------------|------------------------------------------------------------------------------|
-| **UI – UserInterfaceService** | F1, NF2, NF6                    | Eingabe der Drehzahl (10 %-Schritte), Anzeige Soll-/Istwert, Statusmeldungen |
-| **MA – MotorActuator**        | F1, F2, NF6                     | Steuerung des Schneidemotors, PWM-Ausgabe, Stop bei Not-Halt                |
-| **MCU – MainControlUnit**     | F1, F2, NF2, NF3, NF5           | Koordination, Sollwertverarbeitung, Zustandsverwaltung (RUN/STOP/FAULT)     |
-| **SI – SafetyInput**          | F2, NF2, NF7                    | Überwachung Not-Halt, Signalweitergabe an Steuerlogik                        |
-| **CS – CurrentSensor**        | F3, NF3                         | Erfassung der Stromaufnahme (500 ms), Mittelwertbildung                      |
-| **MNT – MaintenanceManager**  | F4                              | Laufzeitzählung und Wartungshinweis nach 48 h                               |
-| **DM – CsvLogger / FileDriver** | F5, NF4, NF5                  | Protokollierung der Prozessdaten (1 Hz), CSV-Export und Dateiverwaltung      |
+| Architektur-Schicht      | Zugehörige Requirements | Beschreibung |
+|--------------------------|--------------------------|--------------|
+| **User Interface**       | F1, NF2, NF6             | Eingabe der Drehzahl, schnelle Reaktionszeit, Genauigkeit der Anzeige/Sollwertvorgabe |
+| **Control-Logic**        | F1, F2, NF2, NF3, NF5     | Sollwertaufbereitung, Not-Halt-Reaktion, Zustandsverwaltung RUN/STOP/FAULT, deterministische Zykluszeiten |
+| **Hardware Abstraction** | F2, F3, NF2, NF7          | Not-Halt, Stromaufnahme erfassen, Hardware-Reaktionszeit, Temperaturbereich |
+| **Persistence Manager**  | F3, F4, F5, NF4, NF5      | Logging 1 Hz, Wartungszähler, CSV-Dateiverwaltung, maximale Dateigröße |
 
 ---
 
-### Traceability (Auszug)
+## Beschreibung der Komponenten
 
-| **Requirement** | **Komponente**                  |
-|-----------------|----------------------------------|
-| F1              | MCU, MA, UI                     |
-| F2              | MCU, SI, MA                     |
-| F3              | CS, MCU                         |
-| F4              | MNT                             |
-| F5              | DM                              |
-| NF1             | MCU, gesamte Architektur (C++)  |
-| NF2             | UI, MCU, SI                     |
-| NF3             | MCU, CS                         |
-| NF4             | DM                              |
-| NF5             | MCU, DM                         |
-| NF6             | MA, MCU                         |
-| NF7             | MA, SI, CS                      |
+| Komponente         | Rolle                         | Verantwortlichkeiten |
+|--------------------|-------------------------------|-----------------------|
+| **UserInterface**  | Präsentationsschicht          | Eingabe der Schneidegeschwindigkeit (10 %-Schritte); Anzeige von Soll-/Istwert; Anzeige von Statusmeldungen (RUN/STOP/FAULT); Rückmeldung an die Steuerungslogik |
+| **Steuerungslogik** | Anwendungslogik              | Verarbeitung der Bedienbefehle; Verwaltung der Betriebszustände (RUN, STOP, FAULT); Sollwertaufbereitung; Reaktion auf Not-Halt; zyklische Steuerung des Gesamtsystems |
+| **HardwareAbstraction** | Hardware-Interface       | Ansteuerung des Schneidemotors (PWM/Duty-Cycle); Erfassung der Stromaufnahme; Weiterleitung des Safety-Signals; Vereinheitlichung aller hardware-nahen Funktionen |
+| **PersistenceManager** | Speicher-/Diagnose-Schicht | Protokollierung der Prozessdaten (Sollwert, Istwert, Stromaufnahme, Systemzustand); CSV-Dateiverwaltung (1 Hz); Verwaltung des Wartungszählers; Bereitstellung von Diagnose- und Log-Daten |
 
 ---
 
