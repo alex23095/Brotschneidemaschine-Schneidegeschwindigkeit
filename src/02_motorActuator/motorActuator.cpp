@@ -41,25 +41,27 @@ int MotorActuator::clampRpm(int rpm) const
 
 std::uint8_t MotorActuator::mapRpmToDuty(int rpm) const
 {
-    @@ - 55, 44 + 57, 67 @@ std::uint8_t MotorActuator::mapRpmToDuty(int rpm) const
-        const int clamped = clampRpm(rpm);
+    const int clamped = clampRpm(rpm);
 
     if (clamped <= 0) {
         return 0U;
     }
 
+    // Bereich der möglichen Drehzahl
+    const int rpmRange = maxRpm_ - minRpm_;
+    if (rpmRange <= 0) {
+        return 0U;
+    }
+
     // lineare Interpolation zwischen minRpm_ und maxRpm_
-    int rpmOffset = clamped - minRpm_;      // 0..rpmRange
-    int span = 100 - static_cast<int>(kMinDutyPercent); // verbleibender Duty-Bereich
+    const int rpmOffset = clamped - minRpm_;              // 0 .. rpmRange
+    const int span = 100 - static_cast<int>(kMinDutyPercent); // verbleibender Duty-Bereich
 
-    int duty = static_cast<int>(kMinDutyPercent) + (rpmOffset * span) / rpmRange;
+    int duty = static_cast<int>(kMinDutyPercent)
+        + (rpmOffset * span) / rpmRange;
 
-    if (duty < 0) {
-        duty = 0;
-    }
-    if (duty > 100) {
-        duty = 100;
-    }
+    if (duty < 0)      duty = 0;
+    else if (duty > 100) duty = 100;
 
     return static_cast<std::uint8_t>(duty);
 }
