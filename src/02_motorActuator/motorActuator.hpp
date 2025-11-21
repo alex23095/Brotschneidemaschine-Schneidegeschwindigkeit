@@ -1,4 +1,4 @@
-﻿// motorActuator.hpp
+// motorActuator.hpp
 #pragma once
 
 #include <cstdint>
@@ -22,7 +22,10 @@ public:
 
     /// Zyklischer Aufruf aus der MainControlUnit.
     /// Berechnet Enable-Flag und Duty-Cycle.
-    void update();
+    void updateControlLoop();
+
+    /// Duty-Cycle manuell vorgeben (z.B. für Tests oder alternative Steuerung).
+    void setDutyCycle(std::uint8_t dutyPercent);
 
     /// true, wenn Motor energiert werden darf.
     bool isEnabled() const { return enabled_; }
@@ -32,6 +35,9 @@ public:
 
     /// Intern verwendeter, geklemmter Drehzahlsollwert.
     int commandRpm() const { return rpmCmd_; }
+
+    /// Rückmeldung der aktuell angenommenen Drehzahl.
+    int getMeasuredSpeed() const;
 
 private:
     int         minRpm_;
@@ -44,4 +50,5 @@ private:
 
     int clampRpm(int rpm) const;
     std::uint8_t mapRpmToDuty(int rpm) const;
+    std::uint8_t clampDuty(std::uint8_t duty) const;
 };

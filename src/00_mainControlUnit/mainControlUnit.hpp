@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <cstdint>
 #include "safetyInput.hpp"
 #include "setPointManager.hpp"
@@ -7,20 +8,23 @@
 /// MainControlUnit:
 /// - zentrale Steuerlogik
 /// - bindet SafetyInput, SetpointManager und MotorActuator zusammen
-/// - Singleton (eine globale Instanz f¸r das System)
+/// - Singleton (eine globale Instanz f√ºr das System)
 class MainControlUnit {
 public:
     /// Zugriff auf die Singleton-Instanz.
     static MainControlUnit& instance();
 
     /// UI-Befehl: Schritt 0..10 (entspricht 0..100 % in 10%-Schritten).
-    void setUiSpeedCommandStep(int step10);
+    void setSpeedStep(int step10);
 
-    /// Rohzust‰nde der Sicherheits-Eing‰nge (von HW-Ebene/GPIO).
-    void setSafetyInputs(const SafetyInput::Inputs& in);
+    /// Rohzust√§nde der Sicherheits-Eing√§nge (von HW-Ebene/GPIO).
+    void readInputs(const SafetyInput::Inputs& in);
 
     /// Zyklische Steuerung (z.B. alle 10 ms aufrufen).
-    void tick();
+    void executeCycle();
+
+    /// Manuelles Setzen des Duty-Cycle (z.B. f√ºr Testzwecke).
+    void setDutyCycle(std::uint8_t dutyPercent);
 
     /// Monitoring / Debug-Informationen:
     int currentSetpointRpm() const { return setpointManager_.currentSetpointRpm(); }
@@ -29,8 +33,19 @@ public:
     bool isMotorEnabled() const { return motorActuator_.isEnabled(); }
     std::uint8_t dutyCyclePercent() const { return motorActuator_.dutyCyclePercent(); }
 
+    /// Ergebnis der Sicherheitsbewertung.
+    SafetyState getSafetyStatus() const { return safetyInput_.state(); }
+
+    /// Dauer des letzten executeCycle-Aufrufs in Millisekunden.
+    std::uint32_t getLastCycleTimeMs() const { return lastCycleTimeMs_; }
+
     SafetyState safetyState() const { return safetyInput_.state(); }
     bool isSafetyOk() const { return safetyInput_.isSafetyOk(); }
+
+    // Legacy-Kompatibilit√§t f√ºr bestehenden Aufrufcode
+    void setUiSpeedCommandStep(int step10) { setSpeedStep(step10); }
+    void setSafetyInputs(const SafetyInput::Inputs& in) { readInputs(in); }
+    void tick() { executeCycle(); }
 
 private:
     // Singleton: Konstruktor privat
@@ -47,6 +62,10 @@ private:
     SetpointManager  setpointManager_;
     MotorActuator    motorActuator_;
 
-    // Letzte Roh-Safety-Eing‰nge
+    // Letzte Roh-Safety-Eing√§nge
     SafetyInput::Inputs pendingSafetyInputs_;
+
+    // Zykluszeit-Messung
+    std::uint32_t lastCycleTimeMs_;
+    std::chrono::steady_clock::time_point lastCycleTimestamp_;
 };
