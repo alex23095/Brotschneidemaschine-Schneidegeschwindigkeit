@@ -4,9 +4,9 @@
 
 enum class SafetyState {
     NotReady,     // System noch nicht stabil gestartet
-    Safe,         // Alle Bedingungen für sicheren Betrieb erfüllt
-    EstopActive,  // Not-Halt betätigt
-    GuardOpen,    // Schutztür offen (oder ähnlicher Schutzkreis)
+    Safe,         // Alle Bedingungen fÃ¼r sicheren Betrieb erfÃ¼llt
+    EstopActive,  // Not-Halt betÃ¤tigt
+    GuardOpen,    // SchutztÃ¼r offen (oder Ã¤hnlicher Schutzkreis)
     Fault         // Logischer Fehler / inkonsistenter Zustand
 };
 
@@ -14,19 +14,25 @@ class SafetyInput {
 public:
     struct Inputs {
         bool estopNc;       // true = Not-Halt-Kreis geschlossen (NC-Kontakt OK)
-        bool guardDoorNc;   // true = Schutztür-Kreis geschlossen (Tür zu)
-        bool safetyReset;   // true = Reset-Taster gedrückt (Momentanwert)
+        bool guardDoorNc;   // true = SchutztÃ¼r-Kreis geschlossen (TÃ¼r zu)
+        bool safetyReset;   // true = Reset-Taster gedrÃ¼ckt (Momentanwert)
     };
 
     /// \param debounceTicks Anzahl aufeinanderfolgender identischer Messwerte,
-    ///                      bevor ein Zustand übernommen wird.
+    ///                      bevor ein Zustand Ã¼bernommen wird.
     explicit SafetyInput(std::uint32_t debounceTicks = 5U);
 
     /// Zyklischer Aufruf aus der Main Loop (z.B. alle 10 ms).
     void update(const Inputs& inputs);
 
+    /// Alias fÃ¼r Traceability-Matrix: Eingangswerte Ã¼bernehmen.
+    void readInputs(const Inputs& inputs) { update(inputs); }
+
     /// true, wenn Motor freigegeben werden darf.
     bool isSafetyOk() const;
+
+    /// Abfrage des aktuellen Sicherheitszustands.
+    SafetyState getSafetyStatus() const { return state_; }
 
     /// Detaillierter Sicherheitszustand.
     SafetyState state() const { return state_; }

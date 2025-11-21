@@ -1,4 +1,10 @@
-﻿#include "mainControlUnit.hpp"
+#include "mainControlUnit.hpp"
+
+void init()
+{
+    // Platzhalter für spätere Initialisierungsschritte
+    (void)MainControlUnit::instance();
+}
 
 // dein vorhandener Tick
 int mainLoopTick()
@@ -6,7 +12,7 @@ int mainLoopTick()
     auto& mcu = MainControlUnit::instance();
 
     // zentrale Steuerung
-    mcu.tick();
+    mcu.executeCycle();
 
     // PWM ansteuern
     std::uint8_t duty = mcu.dutyCyclePercent();
@@ -20,6 +26,7 @@ int mainLoopTick()
 // echte Programmeinstiegstelle
 int main()
 {
+    init();
     while (true)
     {
         mainLoopTick();
