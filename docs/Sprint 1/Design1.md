@@ -1,50 +1,54 @@
 # Design
 
-## Design-Zerlegung (funktional, ohne OO)
+## Design-Zerlegung
 
 ### MCU – Main Control Unit
 
-#### **C01 Sollwert- und Drehzahlsteuerung**
-- **Aufgabe:** Verarbeitung der Sollwertvorgabe (10-%-Stufen), Aktualisierung des Motor-Istwerts, Weitergabe an Motorsteuerung  
-- **Inputs:** `ui_speed_cmd`, `safety_status`  
-- **Outputs:** `speed_target`, `system_state`  
-- **Timing:** zyklisch alle 100 ms  
-- **Trace:** F1, F2, NF2, NF3  
+#### C01 Sollwert- und Drehzahlsteuerung
+- **Aufgabe:** Verarbeitung der Sollwertvorgabe (10-%-Stufen) aus dem User Interface, Aufbereitung des Drehzahlsollwerts und Weitergabe an den Motor-Aktuator.
+- **Inputs:** `ui_speed_cmd`, `safety_status`
+- **Outputs:** `speed_target_pct`, `system_state`
+- **Timing:** zyklisch alle 100 ms
+- **Trace:** F1, F2, NF2, NF3
 
-#### **C02 Not-Halt-Verarbeitung**
-- **Aufgabe:** Erkennung und Umsetzung des Safety-Signals (STOP innerhalb ≤ 100 ms), Zustandsübergang auf FAULT  
-- **Inputs:** `estop_signal`, `motor_feedback`  
-- **Outputs:** `stop_command`, `status_fault`  
-- **Timing:** ereignisgetrieben, Reaktionszeit ≤ 100 ms  
-- **Trace:** F2, NF2, NF7  
+#### C02 Not-Halt-Verarbeitung
+- **Aufgabe:** Auswertung des Safety-Signals vom SafetyInput, Einleitung eines sicheren Stopps (≤ 100 ms) und Übergang in den Zustand FAULT.
+- **Inputs:** `estop_signal` (von SI), `motor_feedback`
+- **Outputs:** `stop_command`, `status_fault`
+- **Timing:** ereignisgetrieben, Reaktionszeit ≤ 100 ms
+- **Trace:** F2, NF2, NF7
 
-#### **C03 Monitoring-Eingang**
-- **Aufgabe:** Erfassen der Stromaufnahme über Sensor (500 ms-Intervall), Mittelwert über 5 Messungen bilden  
-- **Inputs:** `adc_current`, `adc_timestamp`  
-- **Outputs:** `mean_current`  
-- **Timing:** zyklisch alle 500 ms  
-- **Trace:** F3, NF3  
+#### C06 Systemlogik und Zustandsautomat
+- **Aufgabe:** Verwaltung der Betriebszustände RUN, STOP und FAULT inkl. Übergangslogik, Start/Stop-Verhalten und Reset-Mechanismus; Übergabe von Statusinformationen an UI.
+- **Inputs:** `user_command`, `safety_status`, `maintenance_due_flag`
+- **Outputs:** `system_state`, `ui_feedback`
+- **Timing:** zyklisch alle 100 ms
+- **Trace:** NF3, NF5
 
-#### **C04 Wartungsmanagement**
-- **Aufgabe:** Aufsummieren der kumulierten Laufzeit, Auslösen eines Wartungshinweises nach 48 h Betrieb  
-- **Inputs:** `runtime_increment`, `mean_current`  
-- **Outputs:** `maintenance_due_flag`  
-- **Timing:** 1 s-Takt (über Systemzeit)  
-- **Trace:** F4  
+---
 
-#### **C05 Protokollierung / CSV-Logger**
-- **Aufgabe:** Erfassung von Soll-/Istwert, Stromaufnahme, Betriebszustand; Schreiben in CSV-Datei, automatische Neuerstellung bei 1 MB  
-- **Inputs:** `speed_target`, `speed_actual`, `mean_current`, `system_state`  
-- **Outputs:** `log_entry.csv`  
-- **Timing:** 1 Hz (zyklisch)  
-- **Trace:** F5, NF4, NF5  
+### CS / PM – Monitoring, Wartung und Protokollierung
 
-#### **C06 Systemlogik und Zustandsautomat**
-- **Aufgabe:** Verwaltung der Betriebszustände **RUN**, **STOP**, **FAULT**, inkl. Übergangslogik und Reset-Mechanismus  
-- **Inputs:** `user_command`, `safety_status`, `maintenance_due`  
-- **Outputs:** `system_state`, `ui_feedback`  
-- **Timing:** zyklisch 100 ms  
-- **Trace:** NF3, NF5  
+#### C03 Monitoring-Eingang
+- **Aufgabe:** Erfassen der Motorstromaufnahme über den CurrentSensor im 500-ms-Intervall und Berechnung eines gleitenden Mittelwerts über 5 Messungen.
+- **Inputs:** `adc_current`, `adc_timestamp` (von CS)
+- **Outputs:** `mean_current`
+- **Timing:** zyklisch alle 500 ms
+- **Trace:** F3, NF3
+
+#### C04 Wartungsmanagement
+- **Aufgabe:** Aufsummieren der kumulierten Laufzeit im Betriebszustand RUN und Setzen eines Wartungskennzeichens nach 48 h Betrieb; Bereitstellung des Wartungsstatus für MCU/UI.
+- **Inputs:** `runtime_increment` (von MCU), optional `mean_current`
+- **Outputs:** `maintenance_due_flag`
+- **Timing:** typischerweise 1-s-Takt (aus Systemzeit/MCU abgeleitet)
+- **Trace:** F4
+
+#### C05 Protokollierung / CSV-Logger
+- **Aufgabe:** Erfassung und Ablage von Soll-/Istwert, Stromaufnahme und Betriebszustand in einer CSV-Datei; automatisches Anlegen einer neuen Logdatei beim Erreichen von 1 MB.
+- **Inputs:** `timestamp`, `speed_target_pct`, `speed_actual_pct`, `mean_current`, `system_state`, `maintenance_due_flag`
+- **Outputs:** `log_entry.csv` (fortlaufende CSV-Datei mit Rollover)
+- **Timing:** 1 Hz (zyklisch)
+- **Trace:** F5, NF4, NF5
 
 ---
 
