@@ -1,4 +1,4 @@
-# Traceability-Matrix (farbig + „bestanden“)
+# Traceability-Matrix
 
 | **Req-ID** | **Beschreibung** | **Systemkomponente** | **Zugehörige Klassen** | **Methoden / Schnittstellen** | **Sprint** | **Implementierung** | **Testfälle** |
 |-----------|------------------|----------------------|-------------------------|-------------------------------|------------|----------------------|----------------|
