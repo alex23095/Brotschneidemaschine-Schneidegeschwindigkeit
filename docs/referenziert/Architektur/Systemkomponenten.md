@@ -13,23 +13,23 @@
 
 ### Übersicht (vereinfachte Architektur)
 
-         ┌────────────────────┐
-         │   User Interface   │
-         │        (UI)        │
-         └─────────┬──────────┘
-                   │  Bedienung/Anzeige
-┌──────────────────┴──────────────────┐
-│      Main Control Unit (MCU)        │
-│     Steuerungslogik, 100 ms Zyklus  │
-└───────┬───────────┬───────────┬─────┘
-        │           │           │
-        │           │           │
-       ▼            ▼           ▼
- Motor-Aktuator   Current-     Persistence-
-     (MA)         Sensor (CS)  Manager (PM)
-        ▲                         ▲
-        └──────── Safety-Input ───┘
-                   (SI, Not-Halt)
+             ┌────────────────────┐
+             │   User Interface   │
+             │        (UI)        │
+             └─────────┬──────────┘
+                       │  Bedienung/Anzeige
+    ┌──────────────────┴──────────────────┐
+    │      Main Control Unit (MCU)        │
+    │     Steuerungslogik, 100 ms Zyklus  │
+    └───────┬───────────┬───────────┬─────┘
+            │           │           │
+            │           │           │
+           ▼            ▼           ▼
+     Motor-Aktuator   Current-     Data-
+         (MA)         Sensor (CS)  Manager (DM)
+            ▲                         ▲
+            └──────── Safety-Input ───┘
+                       (SI, Not-Halt)
 
 ---
 
