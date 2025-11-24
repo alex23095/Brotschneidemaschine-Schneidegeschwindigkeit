@@ -8,6 +8,8 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 ## 1. Modul-Testfälle
 
+---
+
 ### **TC-M1 – SafetyInput: gültiger Wert**
 **Ziel:** Prüfen, ob ein gültiger Geschwindigkeitswert akzeptiert wird  
 **Modul:** SafetyInput  
@@ -16,6 +18,12 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 **Vorbedingung:** System initialisiert  
 **Aktion:** `checkSpeed(2)`  
 **Erwartetes Ergebnis:** Rückgabewert = `true`  
+
+**Nachbedingungen:**  
+- `checkSpeed(2)` liefert `true`  
+- interne Validierung abgeschlossen  
+- Flags in `SafetyInput::Inputs` unverändert  
+- keine Fallback- oder Fehler-Methoden aktiv  
 
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
@@ -32,6 +40,12 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 **Aktion:** `checkSpeed(10)`  
 **Erwartetes Ergebnis:** Rückgabewert = `false`  
 
+**Nachbedingungen:**  
+- `checkSpeed(10)` liefert `false`  
+- Fehlerstatus über interne Logik gesetzt (z.B. `setInvalidFlag()`)  
+- keine Weitergabe an Folgemethoden  
+- Bereichsgrenzenprüfung abgeschlossen  
+
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
 **Bemerkung:** Wert 10 wurde korrekt als ungültig erkannt  
@@ -47,6 +61,12 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 **Aktion:** `calcNext(1, 3)`  
 **Erwartetes Ergebnis:** Rückgabewert = `2`  
 
+**Nachbedingungen:**  
+- `calcNext(1, 3)` berechnet neuen Wert (`2`)  
+- Rampensteigerung intern korrekt von `1` → `2`  
+- keine Rücksetzung über `resetRamp()` o.Ä.  
+- Zustand des Moduls konsistent  
+
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
 **Bemerkung:** Rampensteigerung um +1 korrekt  
@@ -54,6 +74,8 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ## 2. Integrations-Testfälle
+
+---
 
 ### **TC-I1 – SafetyInput + SetpointManager**
 **Ziel:** Validierung + Rampenberechnung in Kombination  
@@ -67,6 +89,12 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 **Erwartetes Ergebnis:**  
 - Schritt 1: `true`  
 - Schritt 2: Rückgabewert `2`  
+
+**Nachbedingungen:**  
+- `checkSpeed(3)` erfolgreich (`true`)  
+- `calcNext(1, 3)` liefert korrekten Rampenwert  
+- Datenfluss SafetyInput → SetpointManager korrekt  
+- keine Fehlerbehandlung ausgelöst  
 
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
@@ -86,6 +114,12 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 **Erwartetes Ergebnis:**  
 - Schritt 1: `1`  
 - Schritt 2: Beispielwert (z.B. 20 %)  
+
+**Nachbedingungen:**  
+- berechneter Setpoint aus `calcNext()` übernommen (`1`)  
+- Duty-Cycle korrekt aus Setpoint durch `calcDuty(1)` bestimmt  
+- kein Aufruf von Schutzfunktionen (`limitDuty()`, `safetyStop()`)  
+- MotorActuator in stabilem Zustand  
 
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
@@ -107,6 +141,13 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 - `ok == true`  
 - `usedSetpoint == 2`  
 
+**Nachbedingungen:**  
+- `checkSpeed(2)` liefert `true`  
+- MCU übernimmt Wert über interne Logik (z.B. `setUiSpeedCommandStep(2)`)  
+- Weitergabe an SetpointManager erfolgt korrekt (`setTargetRpm()`)  
+- keine Fehlertrigger durch `setSafetyInputs()`  
+- MCU-Zustand konsistent aktualisiert  
+
 **Durchgeführt:** Ja  
 **Testergebnis:** OK  
 **Bemerkung:** Wert korrekt übernommen  
@@ -127,4 +168,3 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 Alle 6 Testfälle wurden erfolgreich ausgeführt und bestanden.
 
 ---
-
