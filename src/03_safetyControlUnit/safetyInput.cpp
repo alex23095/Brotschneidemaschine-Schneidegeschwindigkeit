@@ -31,7 +31,7 @@ bool SafetyInput::inputsEqual(const Inputs& a, const Inputs& b)
 SafetyState SafetyInput::evaluate(const Inputs& in) const
 {
     // Grundlogik:
-    // - estopNc/guardDoorNc sind NC-Kontakte: false => Kreis geöffnet => unsicher
+    // - estopNc/guardDoorNc sind NC-Kontakte: false => Kreis geÃ¶ffnet => unsicher
     // - safetyReset darf den Motor NICHT direkt freigeben, sondern nur
     //   aus einem zuvor sicheren Zustand wieder "armen".
 
@@ -47,9 +47,9 @@ SafetyState SafetyInput::evaluate(const Inputs& in) const
     return SafetyState::Safe;
 }
 
-void SafetyInput::update(const Inputs& inputs)
+void SafetyInput::readInputs(const Inputs& inputs)
 {
-    // Entprellen / Stabilitätsprüfung
+    // Entprellen / StabilitÃ¤tsprÃ¼fung
     if (inputsEqual(inputs, lastRawInputs_)) {
         if (stableCounter_ < debounceTicks_) {
             ++stableCounter_;
@@ -63,7 +63,7 @@ void SafetyInput::update(const Inputs& inputs)
     if (stableCounter_ >= debounceTicks_) {
         stableInputs_ = lastRawInputs_;
 
-        // Nur wenn stabile Eingänge vorliegen, Zustand neu bewerten.
+        // Nur wenn stabile EingÃ¤nge vorliegen, Zustand neu bewerten.
         SafetyState newState = evaluate(stableInputs_);
 
         // Einfache Fehlerlogik: einmal erkannter Fault bleibt gelatcht.
@@ -72,7 +72,7 @@ void SafetyInput::update(const Inputs& inputs)
             return;
         }
 
-        // Hier könnten Plausibilitätsprüfungen ergänzt werden.
+        // Hier kÃ¶nnten PlausibilitÃ¤tsprÃ¼fungen ergÃ¤nzt werden.
         // Beispiel (nur als Platzhalter):
         // if (irgendwas_unlogisch) {
         //     latchedFault_ = true;
