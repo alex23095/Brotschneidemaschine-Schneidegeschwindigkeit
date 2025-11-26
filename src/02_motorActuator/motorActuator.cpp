@@ -1,4 +1,4 @@
-﻿// motorActuator.cpp
+// motorActuator.cpp
 #include "motorActuator.hpp"
 
 namespace {
@@ -88,7 +88,7 @@ void MotorActuator::setManualDutyCycle(std::uint8_t dutyPercent)
     }
 }
 
-void MotorActuator::update()
+void MotorActuator::updateControlLoop()
 {
     // Safety hat immer Priorität:
     if (!safetyOk_) {

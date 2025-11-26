@@ -1,4 +1,4 @@
-﻿#include "mainControlUnit.hpp"
+#include "mainControlUnit.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -27,10 +27,10 @@ MainControlUnit::MainControlUnit()
     pendingSafetyInputs_.safetyReset = false;
 }
 
-void MainControlUnit::setUiSpeedCommandStep(int step10)
+void MainControlUnit::setSpeedStep(int step10)
 {
     // UI wählt 0..10 → SetpointManager erzeugt entsprechende Drehzahl
-    setpointManager_.setCommandStep(step10);
+    setpointManager_.setSpeedStep(step10);
 }
 
 void MainControlUnit::setDutyCycle(std::uint8_t dutyPercent)
@@ -39,7 +39,7 @@ void MainControlUnit::setDutyCycle(std::uint8_t dutyPercent)
     motorActuator_.setManualDutyCycle(std::min<std::uint8_t>(100, dutyPercent));
 }
 
-void MainControlUnit::setSafetyInputs(const SafetyInput::Inputs& in)
+void MainControlUnit::readInputs(const SafetyInput::Inputs& in)
 {
     // Rohwerte zwischenspeichern, eigentliche Verarbeitung in tick()
     pendingSafetyInputs_ = in;
@@ -48,7 +48,7 @@ void MainControlUnit::setSafetyInputs(const SafetyInput::Inputs& in)
 void MainControlUnit::tick()
 {
     // 1) Safety-Eingänge entprellen / auswerten
-    safetyInput_.update(pendingSafetyInputs_);
+    safetyInput_.readInputs(pendingSafetyInputs_);
     const bool safetyOk = safetyInput_.isSafetyOk();
 
     // 2) Sollwert-Rampe aktualisieren (RPM)
@@ -58,7 +58,7 @@ void MainControlUnit::tick()
     // 3) Motor-Aktuator versorgen
     motorActuator_.setSafetyOk(safetyOk);
     motorActuator_.setCommandRpm(rpmCmd);
-    motorActuator_.update();
+    motorActuator_.updateControlLoop();
 
     // 4) Ergebnis:
     //    - motorActuator_.isEnabled()

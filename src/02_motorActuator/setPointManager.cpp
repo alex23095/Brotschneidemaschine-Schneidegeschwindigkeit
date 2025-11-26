@@ -1,4 +1,4 @@
-﻿#include "setpointManager.hpp"
+#include "setPointManager.hpp"
 
 SetpointManager::SetpointManager(int minRpm,
     int maxRpm,
@@ -57,7 +57,7 @@ int SetpointManager::mapStepToRpm(int step) const
     return rpm;
 }
 
-void SetpointManager::setCommandStep(int step10)
+void SetpointManager::setSpeedStep(int step10)
 {
     cmdStep10_ = clampStep(step10);
     targetRpm_ = mapStepToRpm(cmdStep10_);
