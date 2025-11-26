@@ -97,7 +97,7 @@ ein Zustandsdiagramm illustriert die Übergänge **RUN ↔ STOP ↔ FAULT** sowi
 ---
 
 ### Review & Retro
-##Sprint 1  
+## Sprint 1  
 
 ## Vergleich Architektur / Design vs. Implementierung Sprint 1
 
