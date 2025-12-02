@@ -51,7 +51,7 @@ Für Sprint 2 wurden Schnittstellen bereinigt, das Klassendiagramm angepasst und
 - Periodisches Logging  
 - Dateigrößenprüfung & Rotation
 
-## Schnittstellen (Kurzfassung)
+## Schnittstellen
 
 | Quelle | Ziel | Aufruf |
 |--------|------|--------|
