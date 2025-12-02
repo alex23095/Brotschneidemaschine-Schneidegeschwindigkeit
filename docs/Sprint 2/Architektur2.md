@@ -23,10 +23,9 @@ Für Sprint 2 wurden Schnittstellen bereinigt, das Klassendiagramm angepasst und
    - 1-Hz-Logging, Dateiverwaltung
 
 ## Hauptänderungen seit Sprint 1
-- MainControlUnit an realen Code angepasst (`setUiSpeedCommandStep`, `setSafetyInputs`, `tick`)
+- MainControlUnit angepasst (`setUiSpeedCommandStep`, `setSafetyInputs`, `tick`)
 - MotorActuator gestrafft (nur `setDutyPercent`)
 - SafetyInput um echten SafetyState ergänzt
-- Nicht benötigte Methoden entfernt
 - Alle geplanten Module bleiben bestehen (UI, Monitoring, Maintenance, Logging)
 
 ## Komponentenrollen
