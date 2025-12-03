@@ -1,22 +1,19 @@
-# Traceability-Matrix
-
 # Traceability-Matrix 
 
-| Req-ID | Beschreibung | Systemkomponente | Zugehörige Klassen | Methoden / Schnittstellen | **Sprint 1**   | **Sprint 1** | **Sprint 1**  |
-|--------|--------------|------------------|---------------------|----------------------------|---|:------------:|---|
-|        |              |                  |                     |                            | **NR** | **Implementierung** | **Testfälle** |
-| **F1** | Grundsteuerung Motor & Sollwertverarbeitung | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 1 | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 🟢 TC-I2 (bestanden), 🟢 TC-I3 (bestanden) |
-| **F2** | Sicherheitsfreigabe & Eingangserfassung | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 | `readInputs()`, `getSafetyStatus()` | 🟢 TC-M1 (bestanden), 🟢 TC-M2 (bestanden), 🟢 TC-I1 (bestanden), 🟢 TC-I3 (bestanden) |
-| **F3** | Strommessung & Überstromdetektion | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | – | — | 🔴 — |
-| **F4** | Wartungslogik (Betriebszeit, Hinweis) | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | – | — | 🔴 — |
-| **F5** | Logging von Status & Messdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | – | — | 🔴 — |
-| **NF1** | Reaktionszeit der Zyklussteuerung | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 | `executeCycle()` | 🟢 TC-I3 (bestanden) |
-| **NF2** | Messintervall Stromsensor | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | – | — | 🔴 — |
-| **NF3** | Stabilität / Regelqualität Motorsteuerung | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 | `updateControlLoop()` | 🟢 TC-I2 (bestanden) |
-| **NF4** | Wartungszeit-Zähler zuverlässig führen | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | – | — | 🔴 — |
-| **NF5** | Dateigröße & Log-Rollover | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | – | — | 🔴 — |
-| **NF6** | Kompilierbarkeit & Portabilität | Gesamtsystem / Build | gesamte Architektur | `main()`, `init()` | 1 | `main()` | 🟢 TC-I3 (bestanden) |
-| **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | – | — | 🔴 — |
+| Req-ID | Beschreibung | Systemkomponente | Zugehörige Klassen | Methoden / Schnittstellen | **Sprint 1 – NR** | **Sprint 1 – Implementierung** | **Sprint 1 – Testfälle** | **Sprint 2 – NR** | **Sprint 2 – Implementierung** | **Sprint 2 – Testfälle** |
+|--------|--------------|------------------|---------------------|----------------------------|-------------------|-------------------------------|---------------------------|-------------------|-------------------------------|---------------------------|
+| **F1** | Grundsteuerung Motor & Sollwertverarbeitung | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 1 | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 🟢 TC-I2, 🟢 TC-I3 | – | — | — |
+| **F2** | Sicherheitsfreigabe & Eingangserfassung | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 | `readInputs()`, `getSafetyStatus()` | 🟢 TC-M1, 🟢 TC-M2, 🟢 TC-I1, 🟢 TC-I3 | – | — | — |
+| **F3** | Strommessung & Überstromdetektion | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | – | — | 🔴 — | 2 | `readCurrent()`, `checkOvercurrent()` | 🔵 TC-C1, 🔵 TC-C2 |
+| **F4** | Wartungslogik (Betriebszeit, Hinweis) | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | – | — | 🔴 — | 2 | `updateRuntimeMs()`, `isMaintenanceDue()` | 🔵 TC-MNT1, 🔵 TC-MNT2 |
+| **F5** | Logging von Status & Messdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | – | — | 🔴 — | – | — | — |
+| **NF1** | Reaktionszeit der Zyklussteuerung | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 | `executeCycle()` | 🟢 TC-I3 | – | — | — |
+| **NF2** | Messintervall Stromsensor | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | – | — | 🔴 — | 2 | `updateMonitoring()`, `readCurrent()` | 🔵 TC-C1 |
+| **NF3** | Stabilität / Regelqualität Motorsteuerung | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 | `updateControlLoop()` | 🟢 TC-I2 | – | — | — |
+| **NF4** | Wartungszeit-Zähler zuverlässig führen | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | – | — | 🔴 — | 2 | `updateRuntimeMs()`, `getMaintenanceAdvice()` | 🔵 TC-MNT1 |
+| **NF5** | Dateigröße & Log-Rollover | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | – | — | 🔴 — | – | — | — |
+| **NF6** | Kompilierbarkeit & Portabilität | Gesamtsystem / Build | gesamte Architektur | `main()`, `init()` | 1 | `main()` | 🟢 TC-I3 | – | — | — |
+| **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | – | — | 🔴 — | 2 | `runSelfTest()`, `getStatus()` | 🔵 TC-SELF1, 🔵 TC-SELF2 |
 
 ---
 
@@ -28,6 +25,17 @@
 | **F2** | Safety-Not-Halt mit Reaktionszeit < 100 ms |
 | **NF1** | Bedienreaktionszeit ≤ 200 ms validiert |
 | **NF6** | C++-Implementierung auf STM32 lauffähig |
+
+
+### Markierte Requirements für Sprint 2
+
+| Requirement | Kurzbeschreibung |
+|--------------|------------------|
+| **F3** | Strommessung & automatische Überstromabschaltung |
+| **F4** | Wartungslogik (Betriebszeit-Zähler & Wartungshinweis) |
+| **NF2** | Zyklisches Messintervall für Stromsensor (500 ms) |
+| **NF4** | Zuverlässige Führung des Wartungs-Zeitkontos |
+| **NF7** | Hardware-Selbsttest beim Systemstart |
 
 ---
 
@@ -41,6 +49,18 @@
 | **TC-I1** | SafetyInput → SetpointManager: Validierung und Weitergabe |
 | **TC-I2** | SetpointManager → MotorActuator: Übergabe des Sollwerts |
 | **TC-I3** | MainControlUnit übernimmt gültigen Eingabewert korrekt |
+
+
+### Testfälle Sprint 2
+
+| Test-ID | Kurzbeschreibung |
+|---------|------------------|
+| **TC-C1** | Stromsensor liefert gültige Messwerte im geforderten Intervall |
+| **TC-C2** | Überstrom wird erkannt → Motorabschaltung erfolgt |
+| **TC-MNT1** | Wartungszeit wird korrekt hochgezählt (Simulationslauf) |
+| **TC-MNT2** | Wartungshinweis erscheint nach Überschreiten der Grenze |
+| **TC-SELF1** | Selbsttest erkennt defekte Sensoren korrekt |
+| **TC-SELF2** | Selbsttest meldet „OK“ bei intakter Hardware |
 
 ---
 

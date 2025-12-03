@@ -96,13 +96,65 @@ ein Zustandsdiagramm illustriert die Übergänge **RUN ↔ STOP ↔ FAULT** sowi
 
 ---
 
-### Schritt 4: Implementierung
+### Review & Retro
+## Sprint 1  
 
+## Vergleich Architektur / Design vs. Implementierung Sprint 1
 
+| Geplant (Architektur / Design)                                                                 | Implementiert in Sprint 1                                                                 | Abweichung                                                                                     |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `UserInterfaceService` soll Sollwert, Start/Stop und Statusanzeige bereitstellen                | Keine UI-Komponente implementiert; Sollwertübergabe über `setUiSpeedCommandStep()`         | UI-Schicht existiert nur konzeptionell, keine echte Abstraktion oder Start/Stop-API           |
+| `SetpointManager` soll Sollwertaufbereitung übernehmen                                          | Grundlegende Sollwertverwaltung vorhanden                                                   | Details aus Design (Ramp, Filterlogik) noch nicht enthalten                                    |
+| `MainControlUnit` soll als zentrale Logik START/STOP/FAULT-Zustände verwalten                  | Grundsteuerung und Sicherheitsabfrage implementiert, Teile des Zustandsautomaten rudimentär | Vollständiger Zustandsautomat noch nicht umgesetzt                                              |
+| `MotorActuator` soll PWM, Motorstart/-stop und Not-Halt unterstützten                           | Kernfunktionalität `setDutyCycle()` umgesetzt                                               | Höhere Funktionen aus Architektur (`stopEmergency()`, `setSpeed(rpm)`) fehlen noch             |
+| Automatisierte Tests für Kernkomponenten                                                        | Keine automatisierten Tests vorhanden                                                        | Nur manuelle Tests; Testmethoden in `Test1.md` weichen vom aktuellen Code ab                   |
 
-### Schritt 5: Test
+---
 
+## Was lief gut?
 
+- Die Kernfunktionen der Steuerlogik (Motoransteuerung, Sollwertverarbeitung, Safety-Eingänge) wurden implementiert.
+- Alle Requirements, die für Sprint 1 vorgesehen waren (F1, F2, NF1, NF3, NF6), wurden funktional umgesetzt.
+- Manuelle Tests wurden durchgeführt und dokumentiert.
+- Die grundlegende Architektur (Schichtenmodell MCU / Safety / Hardware) konnte beibehalten werden.
+- Die Projektstruktur wurde mit Git synchronisiert und ist nun buildbar.
 
-### Schritt 6: Review & Retro
+---
+
+## Was lief nicht gut?
+
+- Kein einheitlicher Startpunkt für die Implementierung, viel Zeit durch Trial & Error verloren.
+- UML-Diagramme und Dokumentationspflege sehr zeitintensiv.
+- Traceability-Matrix wurde nicht immer sauber umgesetzt; musste im Nachhinein korrigiert werden.
+- Umsetzung anfangs noch nicht vollständig strukturiert
+- Zeitaufwand für Dokumentation und Abstimmungen höher als erwartet
+
+---
+
+## Lessons Learned
+
+- Anforderungen nicht alle auf einmal betrachten – Fokus je Sprint klar abgrenzen.
+- Früh einen strukturierten Startpunkt für die Implementierung definieren (z. B. zuerst MCU-Skelett).
+- Traceability-Matrix während der Entwicklung aktuell halten.
+- Testkonzept früh festlegen – automatisierte Tests ab Sprint 2 einplanen.
+- Schnittstellen zwischen Architektur/Design und tatsächlichem Code enger abstimmen.
+- Safety-, Wartungs- und Monitoring-Funktionalitäten früh schrittweise integrieren statt als „großes Paket“.
+
+---
+
+## Baseline Sprint 1 
+
+- **Funktionaler Kern vorhanden:**  
+  - Grundlegende Motorsteuerung, Sollwertverarbeitung und Safety-Abfrage funktionieren.  
+
+- **Implementierte Komponenten:**  
+  - `MainControlUnit`, `SetpointManager`, `MotorActuator`, `SafetyInput`, `main()`.
+
+- **Teststatus:**  
+  - Nur manuelle Tests durchgeführt.  
+  - Keine automatisierten Tests im Repository.
+
+- **Dokumentationsstand:**  
+  - Architektur & Design weiter gefasst als tatsächliche Implementierung.  
+  - Traceability-Matrix und Testdoku wurden korrigiert, aber bleiben teilweise rudimentär.
 

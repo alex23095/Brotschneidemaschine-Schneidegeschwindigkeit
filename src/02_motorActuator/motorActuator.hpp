@@ -1,4 +1,4 @@
-﻿// motorActuator.hpp
+// motorActuator.hpp
 #pragma once
 
 #include <cstdint>
@@ -22,10 +22,7 @@ public:
 
     /// Zyklischer Aufruf aus der MainControlUnit.
     /// Berechnet Enable-Flag und Duty-Cycle.
-    void update();
-
-    /// Alias für Traceability: entspricht update().
-    void updateControlLoop() { update(); }
+    void updateControlLoop();
 
     /// Direkte Vorgabe eines Duty-Cycle-Werts (0..100 %). Überschreibt den aus RPM berechneten Wert.
     void setManualDutyCycle(std::uint8_t dutyPercent);
@@ -39,7 +36,7 @@ public:
     /// Intern verwendeter, geklemmter Drehzahlsollwert.
     int commandRpm() const { return rpmCmd_; }
 
-    /// Alias für Traceability: gibt den aktuellen (geklemmten) RPM-Wert zurück.
+    /// Liefert den aktuellen (geklemmten) RPM-Wert für Traceability.
     int getMeasuredSpeed() const { return rpmCmd_; }
 
 private:
