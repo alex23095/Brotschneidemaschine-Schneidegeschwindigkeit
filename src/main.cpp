@@ -43,7 +43,7 @@ int main() {
 
     // ggf. initial Safety in die MCU schreiben
     applySafetyToMcu(mcu, currentSafety);
-    mcu.setUiSpeedCommandStep(speedStep);
+    mcu.setSpeedStep(speedStep);
 
     while (running) {
         clearScreen();
@@ -69,7 +69,7 @@ int main() {
                     // Wenn noch nichts eingestellt war, nimm den gemerkten Wert
                     speedStep = storedSpeedStep;
                 }
-                mcu.setUiSpeedCommandStep(speedStep);
+                mcu.setSpeedStep(speedStep);
                 motorRunning = true;
                 clearScreen();
                 std::cout << "Motor gestartet (Speed-Step = " << speedStep << ")\n";
@@ -87,7 +87,7 @@ int main() {
                 // aktuellen Wert merken, damit wir beim Starten wieder dahin springen können
                 storedSpeedStep = speedStep;
                 speedStep = 0;
-                mcu.setUiSpeedCommandStep(0);
+                mcu.setSpeedStep(0);
                 motorRunning = false;
                 clearScreen();
                 std::cout << "Motor gestoppt.\n";
@@ -146,22 +146,23 @@ void handleSafetyMenu(MainControlUnit& mcu, SafetyState& currentSafety) {
     bool back = false;
 
     while (!back) {
-        std::cout << "\n--- Safety-Menue ---\n";
-        std::cout << "Aktueller SafetyState: ";
+        clearScreen();
+        std::cout << "===\tSafety-Menue\t===\n";
+        std::cout << ">>>\tAktueller SafetyState:";
         switch (currentSafety) {
-        case SafetyState::NotReady:    std::cout << "NotReady\n";    break;
-        case SafetyState::Safe:        std::cout << "Safe\n";        break;
-        case SafetyState::EstopActive: std::cout << "EstopActive\n"; break;
-        case SafetyState::GuardOpen:   std::cout << "GuardOpen\n";   break;
-        case SafetyState::Fault:       std::cout << "Fault\n";       break;
+        case SafetyState::NotReady:    std::cout << "NotReady\t<<<\n";    break;
+        case SafetyState::Safe:        std::cout << "Safe\t<<<\n";        break;
+        case SafetyState::EstopActive: std::cout << "EstopActive\t<<<\n"; break;
+        case SafetyState::GuardOpen:   std::cout << "GuardOpen\t<<<\n";   break;
+        case SafetyState::Fault:       std::cout << "Fault\t<<<\n";       break;
         }
 
-        std::cout << " 1) NotReady\n";
-        std::cout << " 2) Safe\n";
-        std::cout << " 3) EstopActive (Not-Halt)\n";
-        std::cout << " 4) GuardOpen  (Schutztuer offen)\n";
-        std::cout << " 5) Fault\n";
-        std::cout << " 0) Zurueck\n";
+        std::cout << " 1: NotReady\n";
+        std::cout << " 2: Safe\n";
+        std::cout << " 3: EstopActive (Not-Halt)\n";
+        std::cout << " 4: GuardOpen  (Schutztuer offen)\n";
+        std::cout << " 5: Fault\n";
+        std::cout << " 0: Zurueck\n";
         std::cout << "Auswahl: ";
 
         int choice = 0;
@@ -192,7 +193,9 @@ void handleSafetyMenu(MainControlUnit& mcu, SafetyState& currentSafety) {
             back = true;
             break;
         default:
+            clearScreen();
             std::cout << "Ungueltige Auswahl.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3)); // 3 s verweilen
             break;
         }
 
@@ -208,7 +211,7 @@ void handleMotorMenu(MainControlUnit& mcu, int& speedStep, int& storedSpeedStep)
 
     while (!back) {
         clearScreen();
-        std::cout << "\n=== Motor-Ansteuerung ===\n";
+        std::cout << "=== Motor-Ansteuerung ===\n";
         std::cout << ">>>\tAnzahl Schritte (0–10): " << speedStep << "\t\t<<<\n";
         std::cout << ">>>\tIstdrehzahl: " << mcu.currentSetpointRpm() << "\t\t<<<\n";
         std::cout << ">>>\tSolldrehzahl: " << mcu.targetSetpointRpm() << "\t\t<<<\n";
@@ -226,7 +229,7 @@ void handleMotorMenu(MainControlUnit& mcu, int& speedStep, int& storedSpeedStep)
             clearScreen();
             if (speedStep < 10) {
                 ++speedStep;
-                mcu.setUiSpeedCommandStep(speedStep);
+                mcu.setSpeedStep(speedStep);
                 storedSpeedStep = speedStep; // gemerkter Wert fuer spaeteres Starten
             }
             else {
@@ -239,7 +242,7 @@ void handleMotorMenu(MainControlUnit& mcu, int& speedStep, int& storedSpeedStep)
             clearScreen();
             if (speedStep > 0) {
                 --speedStep;
-                mcu.setUiSpeedCommandStep(speedStep);
+                mcu.setSpeedStep(speedStep);
                 if (speedStep > 0) {
                     storedSpeedStep = speedStep;
                 }
@@ -274,7 +277,7 @@ void handleDataHandlerMenu() {
 
     while (!back) {
         clearScreen();
-        std::cout << "\n===\tDaten-Handler\t===\n";
+        std::cout << "===\tDaten-Handler\t===\n";
         std::cout << " 1: Aktuellen Systemzustand loggen\n";
         std::cout << " 2: Log loeschen\n";
         std::cout << " 0: Zurueck\n";
@@ -315,33 +318,37 @@ void handleDataHandlerMenu() {
 // ---------------------------------------------------------
 // Safety-State -> MCU-Eingaenge
 // ---------------------------------------------------------
-/// Diese Funktion musst du an deine echte Safety-Logik anpassen.
-/// Idee:
-///  - Du erzeugst hier ein SafetyInput::Inputs inputs{};
-///  - setzt die Roh-Eingaenge passend zu state
-///  - und rufst dann mcu.setSafetyInputs(inputs);
 void applySafetyToMcu(MainControlUnit& mcu, SafetyState state) {
-    // TODO:
-    // SafetyInput::Inputs inputs{};
-    //
-    // switch (state) {
-    //   case SafetyState::Safe:
-    //       inputs.emergencyStop = false;
-    //       inputs.guardClosed   = true;
-    //       break;
-    //   case SafetyState::EstopActive:
-    //       inputs.emergencyStop = true;
-    //       inputs.guardClosed   = true;
-    //       break;
-    //   case SafetyState::GuardOpen:
-    //       inputs.emergencyStop = false;
-    //       inputs.guardClosed   = false;
-    //       break;
-    //   ...
-    // }
-    //
-    // mcu.setSafetyInputs(inputs);
+    SafetyInput::Inputs inputs{};
 
-    (void)mcu;
-    (void)state;
+    switch (state) {
+    case SafetyState::Safe:
+        inputs.estopNc = true;
+        inputs.guardDoorNc = true;
+        inputs.safetyReset = true;
+        break;
+    case SafetyState::EstopActive:
+        inputs.estopNc = false;
+        inputs.guardDoorNc = true;
+        inputs.safetyReset = false;
+        break;
+    case SafetyState::GuardOpen:
+        inputs.estopNc = true;
+        inputs.guardDoorNc = false;
+        inputs.safetyReset = false;
+        break;
+    case SafetyState::Fault:
+        inputs.estopNc = false;
+        inputs.guardDoorNc = false;
+        inputs.safetyReset = false;
+        break;
+    case SafetyState::NotReady:
+    default:
+        inputs.estopNc = false;
+        inputs.guardDoorNc = false;
+        inputs.safetyReset = false;
+        break;
+    }
+
+    mcu.setSafetyInputs(inputs);
 }

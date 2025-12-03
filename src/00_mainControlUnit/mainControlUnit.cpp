@@ -17,9 +17,13 @@ MainControlUnit::MainControlUnit()
     : safetyInput_{ 5U }                    // 5 Zyklen Entprellung
     , setpointManager_{ 500, 3000, 100 }    // 500..3000 U/min, Rampe 100 RPM / Tick
     , motorActuator_{ 500, 3000 }           // gleicher Bereich wie SetpointManager
+    , currentSensor_{}
+    , monitoringService_{ currentSensor_, 500U }
+    , maintenanceManager_{}
     , pendingSafetyInputs_{}
     , lastCycleTimeMs_{ 0 }
     , selfTestPassed_{ false }
+    , lastTickTime_{ std::chrono::steady_clock::now() }
 {
     // Initialwerte der Safety-Eingänge: alle Kreise geöffnet/unsicher.
     pendingSafetyInputs_.estopNc = false;
@@ -39,6 +43,11 @@ void MainControlUnit::setDutyCycle(std::uint8_t dutyPercent)
     motorActuator_.setManualDutyCycle(std::min<std::uint8_t>(100, dutyPercent));
 }
 
+void MainControlUnit::setSimulatedCurrent(std::uint16_t currentMa)
+{
+    currentSensor_.setSimulatedCurrentMa(currentMa);
+}
+
 void MainControlUnit::readInputs(const SafetyInput::Inputs& in)
 {
     // Rohwerte zwischenspeichern, eigentliche Verarbeitung in tick()
@@ -47,6 +56,8 @@ void MainControlUnit::readInputs(const SafetyInput::Inputs& in)
 
 void MainControlUnit::tick()
 {
+    const auto tickStart = std::chrono::steady_clock::now();
+
     // 1) Safety-Eingänge entprellen / auswerten
     safetyInput_.readInputs(pendingSafetyInputs_);
     const bool safetyOk = safetyInput_.isSafetyOk();
@@ -60,10 +71,14 @@ void MainControlUnit::tick()
     motorActuator_.setCommandRpm(rpmCmd);
     motorActuator_.updateControlLoop();
 
-    // 4) Ergebnis:
-    //    - motorActuator_.isEnabled()
-    //    - motorActuator_.dutyCyclePercent()
-    //    werden von der Hardware-nahen Schicht (PWM) ausgelesen.
+    // 4) Monitoring und Wartungszähler
+    monitoringService_.updateMonitoring();
+
+    const auto tickEnd = std::chrono::steady_clock::now();
+    const auto deltaMs = std::chrono::duration_cast<std::chrono::milliseconds>(tickEnd - tickStart).count();
+    maintenanceManager_.updateRuntimeMs(static_cast<std::uint64_t>(deltaMs));
+
+    lastTickTime_ = tickEnd;
 }
 
 void MainControlUnit::executeCycle()
@@ -81,11 +96,13 @@ bool MainControlUnit::runSelfTest()
     const bool rpmRangeOk = setpointManager_.targetSetpointRpm() >= 500 &&
         setpointManager_.targetSetpointRpm() <= 3000;
     const bool dutyOk = motorActuator_.dutyCyclePercent() <= 100;
+    const auto initialCurrent = currentSensor_.readCurrent();
+    const bool sensorOk = !currentSensor_.checkOvercurrent(initialCurrent);
 
     // Safety-Reset muss explizit angefordert werden, bevor gestartet werden kann.
     const bool safetyInputsDefined = pendingSafetyInputs_.estopNc == false &&
         pendingSafetyInputs_.guardDoorNc == false;
 
-    selfTestPassed_ = rpmRangeOk && dutyOk && safetyInputsDefined;
+    selfTestPassed_ = rpmRangeOk && dutyOk && safetyInputsDefined && sensorOk;
     return selfTestPassed_;
 }

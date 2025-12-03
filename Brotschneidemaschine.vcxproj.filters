@@ -63,6 +63,15 @@
     <ClInclude Include="src\02_motorActuator\setPointManager.hpp">
       <Filter>Headerdateien\02_motorActuator</Filter>
     </ClInclude>
+    <ClInclude Include="src\04_monitoringService\currentSensor.hpp">
+      <Filter>Headerdateien\04_monitoringService</Filter>
+    </ClInclude>
+    <ClInclude Include="src\04_monitoringService\monitoringService.hpp">
+      <Filter>Headerdateien\04_monitoringService</Filter>
+    </ClInclude>
+    <ClInclude Include="src\05_dataManagement\maintenanceManager.hpp">
+      <Filter>Headerdateien\05_dataManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -79,6 +88,15 @@
     </ClCompile>
     <ClCompile Include="src\02_motorActuator\setPointManager.cpp">
       <Filter>Quelldateien\02_motorActuator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\04_monitoringService\currentSensor.cpp">
+      <Filter>Quelldateien\04_monitoringService</Filter>
+    </ClCompile>
+    <ClCompile Include="src\04_monitoringService\monitoringService.cpp">
+      <Filter>Quelldateien\04_monitoringService</Filter>
+    </ClCompile>
+    <ClCompile Include="src\05_dataManagement\maintenanceManager.cpp">
+      <Filter>Quelldateien\05_dataManagement</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
