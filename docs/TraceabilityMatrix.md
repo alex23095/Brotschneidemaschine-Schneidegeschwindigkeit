@@ -4,16 +4,16 @@
 |--------|--------------|------------------|---------------------|----------------------------|-------------------|-------------------------------|---------------------------|-------------------|-------------------------------|---------------------------|
 | **F1** | Grundsteuerung Motor & Sollwertverarbeitung | MCU – Main Control Unit | `MainControlUnit`, `SetpointManager`, `MotorActuator` | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 1 | `executeCycle()`, `setSpeedStep()`, `setDutyCycle()` | 🟢 TC-I2, 🟢 TC-I3 | – | — | — |
 | **F2** | Sicherheitsfreigabe & Eingangserfassung | SI – SafetyInput / MCU | `SafetyInput`, `MainControlUnit` | `readInputs()`, `getSafetyStatus()` | 1 | `readInputs()`, `getSafetyStatus()` | 🟢 TC-M1, 🟢 TC-M2, 🟢 TC-I1, 🟢 TC-I3 | – | — | — |
-| **F3** | Strommessung & Überstromdetektion | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | – | — | 🔴 — | 2 | `readCurrent()`, `checkOvercurrent()` | 🔵 TC-C1, 🔵 TC-C2 |
-| **F4** | Wartungslogik (Betriebszeit, Hinweis) | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | – | — | 🔴 — | 2 | `updateRuntimeMs()`, `isMaintenanceDue()` | 🔵 TC-MNT1, 🔵 TC-MNT2 |
-| **F5** | Logging von Status & Messdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | – | — | 🔴 — | – | — | — |
+| **F3** | Strommessung & Überstromdetektion | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `readCurrent()`, `checkOvercurrent()` | – | — | — | 2 | `readCurrent()`, `checkOvercurrent()` | 🔵 TC-C1, 🔵 TC-C2 |
+| **F4** | Wartungslogik (Betriebszeit, Hinweis) | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `isMaintenanceDue()` | – | — | — | 2 | `updateRuntimeMs()`, `isMaintenanceDue()` | 🔵 TC-MNT1, 🔵 TC-MNT2 |
+| **F5** | Logging von Status & Messdaten | DM – CsvLogger | `CsvLogger`, `FileDriver` | `logStatus()`, `rotateLogIfNeeded()` | – | — | — | – | — | — |
 | **NF1** | Reaktionszeit der Zyklussteuerung | MCU – Main Control Unit | `MainControlUnit` | `executeCycle()`, `getLastCycleTimeMs()` | 1 | `executeCycle()` | 🟢 TC-I3 | – | — | — |
-| **NF2** | Messintervall Stromsensor | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | – | — | 🔴 — | 2 | `updateMonitoring()`, `readCurrent()` | 🔵 TC-C1 |
+| **NF2** | Messintervall Stromsensor | CS – CurrentSensor | `CurrentSensor`, `MonitoringService` | `updateMonitoring()`, `readCurrent()` | – | — | — | 2 | `updateMonitoring()`, `readCurrent()` | 🔵 TC-C1 |
 | **NF3** | Stabilität / Regelqualität Motorsteuerung | MCU / MA | `MainControlUnit`, `MotorActuator` | `updateControlLoop()`, `getMeasuredSpeed()` | 1 | `updateControlLoop()` | 🟢 TC-I2 | – | — | — |
-| **NF4** | Wartungszeit-Zähler zuverlässig führen | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | – | — | 🔴 — | 2 | `updateRuntimeMs()`, `getMaintenanceAdvice()` | 🔵 TC-MNT1 |
-| **NF5** | Dateigröße & Log-Rollover | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | – | — | 🔴 — | – | — | — |
+| **NF4** | Wartungszeit-Zähler zuverlässig führen | MNT – MaintenanceManager | `MaintenanceManager` | `updateRuntimeMs()`, `getMaintenanceAdvice()` | – | — | — | 2 | `updateRuntimeMs()`, `getMaintenanceAdvice()` | 🔵 TC-MNT1 |
+| **NF5** | Dateigröße & Log-Rollover | DM – CsvLogger | `CsvLogger`, `FileDriver` | `checkFileSize()`, `rotateLogIfNeeded()` | – | — | — | – | — | — |
 | **NF6** | Kompilierbarkeit & Portabilität | Gesamtsystem / Build | gesamte Architektur | `main()`, `init()` | 1 | `main()` | 🟢 TC-I3 | – | — | — |
-| **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | – | — | 🔴 — | 2 | `runSelfTest()`, `getStatus()` | 🔵 TC-SELF1, 🔵 TC-SELF2 |
+| **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` | – | — | — | 2 | `runSelfTest()`, `getStatus()` | 🔵 TC-SELF1, 🔵 TC-SELF2 |
 
 ---
 
