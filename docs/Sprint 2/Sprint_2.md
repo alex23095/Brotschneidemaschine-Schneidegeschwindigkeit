@@ -101,3 +101,71 @@ Das aktualisierte Klassendiagramm für Sprint 2 zeigt:
 | **Monitoring / Maintenance** | Modelle vorhanden, aber nicht implementiert |
 | **Logging** | Modelle vorhanden, aber nicht implementiert |
 
+---
+
+# Review & Retro  
+## Sprint 2
+
+---
+
+## Vergleich Architektur / Design vs. Implementierung Sprint 2
+
+| Geplant (Architektur / Design) | Implementiert in Sprint 2 | Abweichung |
+|--------------------------------|---------------------------|------------|
+| Erweiterte Sollwertlogik inkl. Filter/Rampen im `SetpointManager` | Grundlegende Übergangslogik ergänzt, Struktur verbessert | Filter-/Rampendetails nur teilweise umgesetzt |
+| Safety-Handling über `SafetySupervisor` + klarer TRIPPED-State | Safety-Logik weiter integriert, Not-Halt funktioniert, TRIPPED → 0 % Duty | SafetySupervisor nicht als eigene Klasse umgesetzt |
+| Monitoring-Service (Grundgerüst) | Monitoring-Funktionen vorbereitet, Teile der Schnittstellen implementiert | Funktionsumfang geringer als im Design vorgesehen |
+| Datenmanagement: Logging-Framework vorbereiten | Basisstruktur im Projektordner, aber keine echte Logging-Implementierung | Logging noch nicht angebunden |
+| UI-Schicht konzeptionell erweitern | Weiterhin keine UI-Schicht, Übergabe über MCU-API | UI bleibt rein konzeptionell |
+| Automatisierte Tests einführen | Erste Struktur geplant, aber keine echten Unit-Tests im Repo | Testautomatisierung verschoben |
+
+---
+
+## Was lief gut?
+
+- Safety-Verhalten und Not-Halt greifen nun konsistent in MCU & MotorActuator ein.  
+- Sollwertverarbeitung wirkt stabiler als in Sprint 1.  
+- Monitoring-Service vorbereitet und integriert.  
+- Projektstruktur deutlich sauberer; Git-Ordnerstruktur korrigiert.  
+- Fehlende Includes, Build-Config und Projektpfade erfolgreich bereinigt.  
+- Abhängigkeiten zwischen Modulen klarer geworden.
+
+---
+
+## Was lief nicht gut?
+
+- Zeitverlust durch Ordner-Umbauten im Dateiexplorer und kaputte Compilerpfade.  
+- Hoher Aufwand für das Wiederherstellen der Git-Struktur.  
+- Sicherheitstechnische Komponenten mehrfach nachgebessert.  
+- Keine echten automatisierten Tests trotz Planung.  
+- Teilweise fehlende Synchronisation zwischen Diagrammen und Code.  
+- Manche Architekturkomponenten (Logging, UI) weiterhin nur theoretisch.
+
+---
+
+## Lessons Learned
+
+- Umbauten an Projektstrukturen nur mit vorherigem Git-Commit durchführen.  
+- Build-Konfiguration (Include-Pfade, Ordnerstruktur) früh stabilisieren.  
+- Safety-Komponenten möglichst klar separieren, um Verflechtungen zu vermeiden.  
+- Automatisierte Tests nicht weiter aufschieben → ab Sprint 3 verbindlich integrieren.  
+- Architektur/Design und tatsächliche Implementierung enger und laufend abgleichen.  
+- Dokumentation inkrementell pflegen statt große Blöcke am Sprintende.
+
+---
+
+## Baseline Sprint 2
+
+- **Funktional erweitert:**  
+  - Safety-Logik robuster, Sollwertverarbeitung verbessert, Monitoring angebunden.
+
+- **Implementierte/erweiterte Komponenten:**  
+  - `MainControlUnit`, `SetpointManager` (erweitert), `MotorActuator` (Safety geregelter), `MonitoringService` (Basis), verbesserte Projektstruktur.
+
+- **Teststatus:**  
+  - Manuelle Tests vorhanden.  
+  - Automatisierte Tests weiterhin nicht implementiert.
+
+- **Dokumentationsstand:**  
+  - Traceability-Matrix teilweise erweitert.  
+  - Architektur weicht in einigen Punkten von der Umsetzung ab (UI, Logging, SafetySupervisor).
