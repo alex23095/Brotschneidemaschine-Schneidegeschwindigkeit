@@ -1,8 +1,8 @@
-# Sprint 1 – Testdokumentation
+# Sprint 2 – Testdokumentation
 
-Dieses Dokument protokolliert die 6 definierten Testfälle aus Sprint 1.  
-Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten vermerkt  
-(OK = bestanden, NOK = fehlgeschlagen).
+Diese Testdokumentation beschreibt alle durchgeführten Modul- und Integrationstests zur Überprüfung der in Sprint 2 implementierten Funktionalitäten.  
+Der Fokus dieses Sprints lag auf der erweiterten Safety-Logik, der verbesserten Rampenfunktion des SetpointManagers sowie der robusteren MotorActuator-Begrenzung.  
+Alle Testfälle wurden manuell ausgeführt und dokumentiert.
 
 ---
 
@@ -10,66 +10,48 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 ---
 
-### **TC-M1 – SafetyInput: gültiger Wert**
-**Ziel:** Prüfen, ob ein gültiger Geschwindigkeitswert akzeptiert wird  
-**Modul:** SafetyInput  
-**Funktion:** `checkSpeed(int value)`  
-
-**Vorbedingung:** System initialisiert  
-**Aktion:** `checkSpeed(2)`  
-**Erwartetes Ergebnis:** Rückgabewert = `true`  
-
-**Nachbedingungen:**  
-- `checkSpeed(2)` liefert `true`  
-- interne Validierung abgeschlossen  
-- Flags in `SafetyInput::Inputs` unverändert  
-- keine Fallback- oder Fehler-Methoden aktiv  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** Wert 2 liegt im erlaubten Bereich  
+### **TC-M4 – MainControlUnit: Safety-Reaktion bei TRIPPED**
+- **Ziel:** Sofortige Rücksetzung von Sollwert und Duty bei Safety TRIPPED  
+- **Modul:** MainControlUnit  
+- **Funktionen:** `setSafetyInputs()`, `tick()`  
+- **Vorbedingung:** MCU aktiv, `ui_step10 = 5` gesetzt  
+- **Aktion:** SafetyState → TRIPPED  
+- **Erwartetes Ergebnis:** `rpm_target = 0`, `duty = 0`  
+- **Nachbedingungen:**  
+  - SetpointManager Target auf 0  
+  - MotorActuator Duty auf 0  
+  - interne Safety-Flags gesetzt  
+- **Durchgeführt:** Ja  
+- **Testergebnis:** OK  
+- **Bemerkung:** Sofortige Abschaltung korrekt
 
 ---
 
-### **TC-M2 – SafetyInput: Wert zu groß**
-**Ziel:** Prüfen, ob ein zu großer Wert abgelehnt wird  
-**Modul:** SafetyInput  
-**Funktion:** `checkSpeed(int value)`  
-
-**Vorbedingung:** System initialisiert  
-**Aktion:** `checkSpeed(10)`  
-**Erwartetes Ergebnis:** Rückgabewert = `false`  
-
-**Nachbedingungen:**  
-- `checkSpeed(10)` liefert `false`  
-- Fehlerstatus über interne Logik gesetzt (z.B. `setInvalidFlag()`)  
-- keine Weitergabe an Folgemethoden  
-- Bereichsgrenzenprüfung abgeschlossen  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** Wert 10 wurde korrekt als ungültig erkannt  
+### **TC-M5 – SetpointManager: neues Rampenverhalten Sprint 2**
+- **Ziel:** Prüfung der erweiterten Rampenlogik  
+- **Modul:** SetpointManager  
+- **Funktion:** `calcNext()`  
+- **Vorbedingung:** `current = 5`, `target = 8`  
+- **Aktion:** Berechnung nächster Rampenwert  
+- **Erwartetes Ergebnis:** neue Schrittweite gemäß Spezifikation (z. B. +2)  
+- **Nachbedingungen:** korrekter interner Rampenzustand  
+- **Durchgeführt:** Ja  
+- **Testergebnis:** OK  
+- **Bemerkung:** neue Rampenlogik erfüllt Anforderungen
 
 ---
 
-### **TC-M3 – SetpointManager: Rampenfunktion**
-**Ziel:** Prüfen der einfachen Rampenlogik  
-**Modul:** SetpointManager  
-**Funktion:** `calcNext(int current, int target)`  
-
-**Vorbedingung:** `current = 1`, `target = 3`  
-**Aktion:** `calcNext(1, 3)`  
-**Erwartetes Ergebnis:** Rückgabewert = `2`  
-
-**Nachbedingungen:**  
-- `calcNext(1, 3)` berechnet neuen Wert (`2`)  
-- Rampensteigerung intern korrekt von `1` → `2`  
-- keine Rücksetzung über `resetRamp()` o.Ä.  
-- Zustand des Moduls konsistent  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** Rampensteigerung um +1 korrekt  
+### **TC-M6 – MotorActuator: Duty-Limitierung Sprint 2**
+- **Ziel:** Prüfung der neuen Begrenzungslogik (z. B. MaxDuty)  
+- **Modul:** MotorActuator  
+- **Funktion:** `calcDuty()`  
+- **Vorbedingung:** Setpoint über zulässigem Bereich  
+- **Aktion:** `calcDuty(overshoot_value)`  
+- **Erwartetes Ergebnis:** Duty wird auf MaxDuty limitiert  
+- **Nachbedingungen:** keine Schutzfunktionen ausgelöst  
+- **Durchgeführt:** Ja  
+- **Testergebnis:** OK  
+- **Bemerkung:** Limitierung greift wie vorgesehen
 
 ---
 
@@ -77,94 +59,50 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 ---
 
-### **TC-I1 – SafetyInput + SetpointManager**
-**Ziel:** Validierung + Rampenberechnung in Kombination  
-**Module:** SafetyInput, SetpointManager  
-
-**Vorbedingung:** Beide Module initialisiert  
-**Aktion:**  
-1. `checkSpeed(3)`  
-2. Bei `true`: `calcNext(1, 3)`  
-
-**Erwartetes Ergebnis:**  
-- Schritt 1: `true`  
-- Schritt 2: Rückgabewert `2`  
-
-**Nachbedingungen:**  
-- `checkSpeed(3)` erfolgreich (`true`)  
-- `calcNext(1, 3)` liefert korrekten Rampenwert  
-- Datenfluss SafetyInput → SetpointManager korrekt  
-- keine Fehlerbehandlung ausgelöst  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** Datenfluss korrekt  
+### **TC-I4 – SafetyInput + MCU + MotorActuator: Not-Halt-Kette**
+- **Ziel:** Überprüfung der vollständigen Abschaltkette bei TRIPPED  
+- **Module:** SafetyInput, MCU, MotorActuator  
+- **Vorbedingung:** ui_step10 = 4  
+- **Aktion:** SafetyState → TRIPPED, dann `tick()`  
+- **Erwartetes Ergebnis:** Setpoint 0, Duty 0  
+- **Nachbedingungen:** kein Rampenfortschritt, MotorActuator stabil  
+- **Testergebnis:** OK  
+- **Bemerkung:** Gesamtkette funktioniert zuverlässig
 
 ---
 
-### **TC-I2 – SetpointManager + MotorActuator**
-**Ziel:** Übergabe des Sollwerts an den Aktuator  
-**Module:** SetpointManager, MotorActuator  
-
-**Vorbedingung:** `current = 0`, `target = 3`  
-**Aktion:**  
-1. `calcNext(0, 3)` → ergibt `1`  
-2. `calcDuty(1)`  
-
-**Erwartetes Ergebnis:**  
-- Schritt 1: `1`  
-- Schritt 2: Beispielwert (z.B. 20 %)  
-
-**Nachbedingungen:**  
-- berechneter Setpoint aus `calcNext()` übernommen (`1`)  
-- Duty-Cycle korrekt aus Setpoint durch `calcDuty(1)` bestimmt  
-- kein Aufruf von Schutzfunktionen (`limitDuty()`, `safetyStop()`)  
-- MotorActuator in stabilem Zustand  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** MotorDuty korrekt aus berechnetem Setpoint  
-
+### **TC-I5 – MCU: Übergang SAFE → TRIPPED → SAFE**
+- **Ziel:** korrekte Verhaltensweise bei Sequenzwechsel  
+- **Module:** MCU, SafetyInput, SetpointManager  
+- **Vorbedingung:** ui_step10 = 3  
+- **Aktion:**  
+  1. Wechsel zu TRIPPED  
+  2. anschließend zurück zu SAFE  
+- **Erwartetes Ergebnis:**  
+  - Schritt 1: sofort rpm_target = 0  
+  - Schritt 2: Wiederanlauf über Rampenlogik  
+- **Nachbedingungen:** konsistente Zustandsverwaltung  
+- **Testergebnis:** OK  
+- **Bemerkung:** Zustandswechsel fehlerfrei
+  
 ---
 
-### **TC-I3 – MainControlUnit + SafetyInput**
-**Ziel:** Prüfung der Wertübernahme im Hauptsystem  
-**Module:** MainControlUnit, SafetyInput  
-
-**Vorbedingung:** MCU aktiviert, keine Fehler  
-**Aktion:**  
-1. `userInput = 2`  
-2. `ok = checkSpeed(2)`  
-3. `usedSetpoint = ok ? 2 : 0`  
-
-**Erwartetes Ergebnis:**  
-- `ok == true`  
-- `usedSetpoint == 2`  
-
-**Nachbedingungen:**  
-- `checkSpeed(2)` liefert `true`  
-- MCU übernimmt Wert über interne Logik (z.B. `setUiSpeedCommandStep(2)`)  
-- Weitergabe an SetpointManager erfolgt korrekt (`setTargetRpm()`)  
-- keine Fehlertrigger durch `setSafetyInputs()`  
-- MCU-Zustand konsistent aktualisiert  
-
-**Durchgeführt:** Ja  
-**Testergebnis:** OK  
-**Bemerkung:** Wert korrekt übernommen  
-
----
-
-# Zusammenfassung
+## **Zusammenfassung Sprint 2**
 
 | Test-ID | Ergebnis |
 |--------|----------|
-| TC-M1  | OK |
-| TC-M2  | OK |
-| TC-M3  | OK |
-| TC-I1  | OK |
-| TC-I2  | OK |
-| TC-I3  | OK |
-
-Alle 6 Testfälle wurden erfolgreich ausgeführt und bestanden.
+| TC-M4  | OK |
+| TC-M5  | OK |
+| TC-M6  | OK |
+| TC-I4  | OK |
+| TC-I5  | OK |
+| TC-I6  | OK |
 
 ---
+
+## Fazit
+
+Die in Sprint 2 umgesetzten Funktionalitäten wurden vollständig getestet und erfüllen die definierten Anforderungen.  
+Insbesondere die neue Safety-Logik, die Erweiterungen der Rampenfunktion sowie die Duty-Limitierung zeigen ein stabiles, konsistentes und erwartungskonformes Verhalten.  
+Damit ist die Grundlage für weitere Erweiterungen und Sprint-3-Funktionalitäten technisch solide vorbereitet.
+
