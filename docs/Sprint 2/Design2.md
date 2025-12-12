@@ -1,4 +1,4 @@
-# Design – Sprint 2 (überarbeitet)
+# Design – Sprint 2
 
 ## Ziel von Sprint 2 im Software-Design
 
