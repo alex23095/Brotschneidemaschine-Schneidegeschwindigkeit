@@ -15,6 +15,8 @@
 | **NF6** | Kompilierbarkeit & Portabilität | Gesamtsystem / Build | gesamte Architektur | `main()`, `init()` | 1 | `main()` | 🟢 TC-I3 |  |  |  |
 | **NF7** | Hardware-Selbsttest beim Start | Hardware – Gesamtsystem | `MainControlUnit`, `MotorActuator`, `CurrentSensor` | `runSelfTest()`, `getStatus()` |  |  |  | 2 | `runSelfTest()`, `getStatus()` | 🟢 TC-SELF1, 🟢 TC-SELF2 |
 
+**Hinweis:** In Sprint 2 wurden **alle Testfälle aus Sprint 1 (TC-M1 bis TC-M3 sowie TC-I1 bis TC-I3)** erneut durchgeführt und erfolgreich abgeschlossen.
+
 
 ---
 
