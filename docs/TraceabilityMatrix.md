@@ -42,6 +42,15 @@
 
 ---
 
+### Markierte Requirements für Sprint 3
+
+| Requirement | Kurzbeschreibung |
+|--------------|------------------|
+| **F5** | Logging von Status- und Messdaten |
+| **NF5** | Dateigrößenbegrenzung & Log-Rollover |
+
+---
+
 ### Testfälle Sprint 1
 
 | Test-ID | Kurzbeschreibung |
@@ -64,6 +73,16 @@
 | **TC-MNT2** | Wartungshinweis erscheint nach Überschreiten der Grenze |
 | **TC-SELF1** | Selbsttest erkennt defekte Sensoren korrekt |
 | **TC-SELF2** | Selbsttest meldet „OK“ bei intakter Hardware |
+
+---
+
+### Testfälle Sprint 3
+
+| Test-ID | Kurzbeschreibung |
+|---------|------------------|
+| **TC-LOG1** | CSV-Logger schreibt zyklisch Status- und Messdaten |
+| **TC-LOG2** | Logeintrag enthält korrekte Zeitstempel und Werte |
+| **TC-NF5-1** | Überschreiten der maximalen Dateigröße löst Log-Rollover aus |
 
 ---
 
