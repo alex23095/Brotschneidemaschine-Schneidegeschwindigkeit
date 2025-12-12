@@ -2,7 +2,10 @@
 
 Diese Testdokumentation beschreibt alle durchgeführten Modul- und Integrationstests zur Überprüfung der in Sprint 2 implementierten Funktionalitäten.  
 Der Fokus dieses Sprints lag auf der erweiterten Safety-Logik, der verbesserten Rampenfunktion des SetpointManagers sowie der robusteren MotorActuator-Begrenzung.  
+
 Alle Testfälle wurden manuell ausgeführt und dokumentiert.
+
+**Zusätzlich wurden im Rahmen der Absicherung der Sprint-2-Implementierungen alle Testfälle aus Sprint 1 erneut vollständig durchgeführt (Regressionstest), um sicherzustellen, dass bestehende Funktionalitäten durch die Erweiterungen in Sprint 2 nicht beeinträchtigt wurden.**
 
 ---
 
@@ -101,6 +104,16 @@ Alle Testfälle wurden manuell ausgeführt und dokumentiert.
 
 ---
 
+## 3. Regressionstests (Sprint 1)
+
+Im Rahmen von Sprint 2 wurden **alle Modul- und Integrationstests aus Sprint 1 (TC-M1 bis TC-M3 sowie TC-I1 bis TC-I3)** erneut durchgeführt.
+
+- **Ziel:** Sicherstellung der Abwärtskompatibilität und Stabilität bestehender Funktionen  
+- **Ergebnis:** Alle Sprint-1-Testfälle erneut **OK**  
+- **Bemerkung:** Keine Regressionen oder Seiteneffekte durch Sprint-2-Erweiterungen festgestellt
+
+---
+
 ## **Zusammenfassung Sprint 2**
 
 | Test-ID | Ergebnis |
@@ -111,12 +124,13 @@ Alle Testfälle wurden manuell ausgeführt und dokumentiert.
 | TC-I4  | OK |
 | TC-I5  | OK |
 | TC-I6  | OK |
+| Regression Sprint 1 | OK |
 
 ---
 
 ## Fazit
 
 Die in Sprint 2 umgesetzten Funktionalitäten wurden vollständig getestet und erfüllen die definierten Anforderungen.  
-Insbesondere die neue Safety-Logik, die Erweiterungen der Rampenfunktion sowie die Duty-Limitierung zeigen ein stabiles, konsistentes und erwartungskonformes Verhalten.  
-Damit ist die Grundlage für weitere Erweiterungen und Sprint-3-Funktionalitäten technisch solide vorbereitet.
+Durch die erneute Durchführung aller Sprint-1-Testfälle konnte zusätzlich sichergestellt werden, dass keine Regressionen entstanden sind.  
 
+Die Safety-Logik, die erweiterte Rampenfunktion sowie die Duty-Limitierung zeigen ein stabiles, konsistentes und erwartungskonformes Verhalten und bilden eine solide Grundlage für Sprint 3.
