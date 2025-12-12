@@ -1,66 +1,126 @@
 # Design – Sprint 2
 
+## Ziel von Sprint 2 im Software-Design
+
+Sprint 2 fokussiert sich auf die **Präzisierung, Entkopplung und Stabilisierung**
+der bereits eingeführten Architektur.  
+Im Gegensatz zu Sprint 1, der die funktionale Basis gelegt hat, werden in
+Sprint 2 Verantwortlichkeiten klar getrennt, Schnittstellen geschärft und
+sicherheitsrelevante Abläufe explizit modelliert.
+
+---
+
 ## Design-Zerlegung
 
 ### MCU – Main Control Unit
 
-#### C01 Sollwert- und Drehzahlsteuerung (überarbeitet)
-- **Aufgabe:** Verarbeitung der Sollwertvorgabe in 10-%-Schritten über `setUiSpeedCommandStep()`, Übergabe an den `SetpointManager` und Ableitung des Duty-Cycle über den `MotorActuator`.
-- **Inputs:** `ui_step10`, `safety_state`
-- **Outputs:** `rpm_target`, `duty_target`
-- **Timing:** zyklisch über `tick()` (≈ 100 ms)
-- **Trace:** F1, F2, NF2, NF3
+#### C01 Sollwert- und Drehzahlsteuerung (funktional erweitert)
 
-#### C02 Not-Halt / Safety-Verarbeitung (angepasst)
-- **Aufgabe:** Auswertung des Safety-Zustands (`SafetyState::SAFE/TRIPPED`) sowie sofortige Reduktion des Sollwerts auf 0 bei TRIPPED; Weitergabe an den Motor über Duty 0 %.
-- **Inputs:** `SafetyInput::getState()`
-- **Outputs:** `rpm_target = 0`, `system_fault`
-- **Timing:** ereignisnah, reagiert beim nächsten `tick()`
-- **Trace:** F2, NF2
+- **Aufgabe:**  
+  Verarbeitung der UI-Sollwertvorgabe in 10-%-Schritten über
+  `setUiSpeedCommandStep()`.  
+  Entkopplung zwischen Benutzereingabe, Sollwertaufbereitung
+  (`SetpointManager`) und Aktuatoransteuerung (`MotorActuator`).
 
-#### C06 Systemlogik und Statusbereitstellung (aktualisiert)
-- **Aufgabe:** Verwaltung der Systemparameter (aktuelle und Ziel-Drehzahl), Ausgabe des Status an die UI-Schicht, Erzeugung von Monitoring- und Logging-Daten.
-- **Inputs:** `ramp_output`, `current_measurement`, `maintenance_flag`
-- **Outputs:** `Status`
-- **Timing:** zyklisch
-- **Trace:** NF3
+- **Sprint-2-Erweiterungen gegenüber Sprint 1:**  
+  - klare Trennung von UI-Eingabe und internem Drehzahlsollwert  
+  - definierte Übergabeschnittstelle zum `SetpointManager`  
+  - Vorbereitung einer Rampen- und Glättungslogik im Design  
+
+- **Inputs:** `ui_step10`, `safety_state`  
+- **Outputs:** `rpm_target`, `duty_target`  
+- **Timing:** zyklisch über `tick()` (≈ 100 ms)  
+- **Trace:** F1, F2, NF2, NF3  
 
 ---
 
-### CS / PM – Monitoring, Wartung und Protokollierung (modelliert, nicht implementiert)
+#### C02 Not-Halt / Safety-Verarbeitung (verhaltenslogisch präzisiert)
 
-#### C03 Monitoring-Eingang (modelliert)
-- **Aufgabe:** Mittelwertbildung der Stromaufnahme über Fenster von 5 Werten. Dient der späteren Diagnose, Belastungsabschätzung und Wartungslogik.
-- **Inputs:** `readMilliAmpere()`
-- **Outputs:** `mean_current`
-- **Timing:** 500 ms
-- **Trace:** F3, NF3
+- **Aufgabe:**  
+  Zentrale Auswertung des Safety-Zustands (`SAFE` / `TRIPPED`) und
+  deterministische Durchsetzung eines sicheren Systemzustands.
 
-#### C04 Wartungsmanagement (modelliert)
-- **Aufgabe:** Berechnung der kumulierten Laufzeit im Zustand RUN; Aktivierung des Wartungsflags ab definierter Schwelle.
-- **Inputs:** `runtime_increment`
-- **Outputs:** `maintenance_due_flag`
-- **Timing:** 1 s
-- **Trace:** F4
+- **Sprint-2-Erweiterungen gegenüber Sprint 1:**  
+  - Safety-Ereignisse überschreiben alle aktiven Sollwerte  
+  - definierter Systemzustand `TRIPPED` mit eindeutigem Ausgang  
+  - Safety ist kein Nebencheck mehr, sondern ein dominanter Steuerpfad  
 
-#### C05 CSV-Protokollierung (modelliert)
-- **Aufgabe:** 1-Hz-Protokollierung von Sollwert, Stromaufnahme und Systemstatus; Dateirotation nach Erreichen der Maximalgröße.
-- **Inputs:** `Status`, `mean_current`
-- **Outputs:** CSV-Dateieinträge
-- **Timing:** 1 Hz
-- **Trace:** F5, NF4, NF5
+- **Inputs:** `SafetyInput::getState()`  
+- **Outputs:** `rpm_target = 0`, `duty_target = 0`, `system_fault`  
+- **Timing:** ereignisnah, wirksam im nächsten `tick()`  
+- **Trace:** F2, NF2  
+
+---
+
+#### C06 Systemlogik und Statusbereitstellung (neu strukturiert)
+
+- **Aufgabe:**  
+  Zentrale Aggregation des Systemzustands zur Bereitstellung für UI,
+  Monitoring und spätere Protokollierung.
+
+- **Sprint-2-Erweiterungen:**  
+  - Bündelung von Sollwert, Istwert und Systemzustand  
+  - klare Trennung zwischen Steuerlogik (C01/C02) und Statushaltung  
+  - definierte Ausgangsschnittstelle für spätere Services  
+
+- **Inputs:** `rpm_target`, `current_measurement`, `safety_state`  
+- **Outputs:** `SystemStatus`  
+- **Timing:** zyklisch  
+- **Trace:** NF3  
+
+---
+
+## CS / PM – Monitoring, Wartung und Protokollierung  
+*(in Sprint 2 neu modelliert, noch nicht implementiert)*
+
+#### C03 Monitoring-Service (neu modelliert)
+
+- **Aufgabe:**  
+  Mittelwertbildung der Stromaufnahme über definierte Zeitfenster
+  zur späteren Diagnose und Zustandsbewertung.
+
+- **Inputs:** `readMilliAmpere()`  
+- **Outputs:** `mean_current`  
+- **Timing:** 500 ms  
+- **Trace:** F3, NF3  
+
+---
+
+#### C04 Wartungsmanagement (neu modelliert)
+
+- **Aufgabe:**  
+  Erfassung der kumulierten Laufzeit im RUN-Zustand und Ableitung
+  eines Wartungsbedarfs.
+
+- **Inputs:** `runtime_increment`  
+- **Outputs:** `maintenance_due_flag`  
+- **Timing:** 1 s  
+- **Trace:** F4  
+
+---
+
+#### C05 CSV-Protokollierung (neu modelliert)
+
+- **Aufgabe:**  
+  Zeitbasierte Protokollierung zentraler Systemdaten mit
+  Dateirotationskonzept.
+
+- **Inputs:** `SystemStatus`, `mean_current`  
+- **Outputs:** CSV-Dateieinträge  
+- **Timing:** 1 Hz  
+- **Trace:** F5, NF4, NF5  
 
 ---
 
 ## Klassendiagramm
 
-Das Klassendiagramm für Sprint 2 wurde vollständig bereinigt und entspricht nun der tatsächlichen Implementierung.
-Es beinhaltet:
+Das Klassendiagramm wurde in Sprint 2 **bereinigt und an die reale
+Implementierung angepasst**:
 
-- korrekte Signaturen der `MainControlUnit` (`setUiSpeedCommandStep()`, `setSafetyInputs()`, `tick()`)
-- reduzierte und reale Schnittstelle des `MotorActuator`
-- Safety-State-Handling gemäß Implementierung (`SafetyState`)
-- alle zukünftigen Module (UI, Monitoring, Maintenance, Logging) als weiterhin gültige Architekturbausteine
+- reduzierte Schnittstellen ohne konzeptionelle Platzhalter  
+- korrekte Methodensignaturen der `MainControlUnit`  
+- explizites Safety-State-Handling  
+- zukünftige Module weiterhin als gültige Architekturbausteine modelliert  
 
 ![Klassendiagramm](../referenziert/Design/Klassendiagramm_Sprint2.png)
 
@@ -68,13 +128,11 @@ Es beinhaltet:
 
 ## Sequenzdiagramm
 
-Das Sequenzdiagramm zeigt die Abläufe folgender zentraler Szenarien:
+Das Sequenzdiagramm verdeutlicht zentrale Sprint-2-Szenarien:
 
-- **Änderung der Geschwindigkeit** über UI → MainControlUnit → SetpointManager → MotorActuator  
-- **Safety-Auslösung**: SafetyInput → MainControlUnit → Duty=0 %  
-- **Monitoring & Logging (modelliert)**: MCU → MonitoringService → CsvLogger  
-
-Diese Abläufe verdeutlichen die zeitliche Interaktion der Module.
+- UI-Sollwertänderung mit entkoppelter Sollwertaufbereitung  
+- deterministische Safety-Auslösung mit Priorität  
+- vorbereitete Monitoring- und Logging-Kette  
 
 ![Sequenzdiagramm](../referenziert/Design/Sequenzdiagramm.png)
 
@@ -82,13 +140,9 @@ Diese Abläufe verdeutlichen die zeitliche Interaktion der Module.
 
 ## Kommunikationsdiagramm
 
-Das Kommunikationsdiagramm stellt die gleichen Abläufe wie das Sequenzdiagramm dar, allerdings strukturell:
-
-- Welche Komponenten direkt interagieren  
-- Welche Nachrichten in welcher Reihenfolge fließen  
-- Welche Abhängigkeiten zwischen den Systemteilen existieren  
-
-Durch diese Darstellung wird klar erkennbar, dass die `MainControlUnit` weiterhin die zentrale Kommunikationsinstanz ist.
+Das Kommunikationsdiagramm zeigt die strukturellen Abhängigkeiten
+zwischen den Komponenten und bestätigt die `MainControlUnit`
+als zentrale Koordinationsinstanz.
 
 ![Kommunikationsdiagramm](../referenziert/Design/Kommunikationsdiagramm.png)
 
@@ -96,12 +150,13 @@ Durch diese Darstellung wird klar erkennbar, dass die `MainControlUnit` weiterhi
 
 ## Design Pattern
 
-### Singleton-Pattern (unverändert)
+### Singleton – bewusste Beibehaltung
 
-Auch in Sprint 2 wird das Singleton für die `MainControlUnit` eingesetzt, um:
+Das Singleton-Pattern für die `MainControlUnit` wurde in Sprint 2
+bewusst beibehalten:
 
-- eine einzige Instanz der zentralen Steuerlogik zu gewährleisten  
-- einheitlichen Systemstatus zu sichern  
-- konsistente Kommunikation zwischen UI, Safety, Motor und späteren Modulen zu ermöglichen  
+- eindeutiger Systemzustand  
+- deterministisches Verhalten  
+- geringe Komplexität im Embedded-Kontext  
 
-Dies bleibt für ressourcenschwache Embedded-Systeme weiterhin das optimale Muster.
+Die Stabilität dieses Entwurfs ist Teil der Designentscheidung.

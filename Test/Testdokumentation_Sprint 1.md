@@ -11,6 +11,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-M1 – SafetyInput: gültiger Wert**
+
 **Ziel:** Prüfen, ob ein gültiger Geschwindigkeitswert akzeptiert wird  
 **Modul:** SafetyInput  
 **Funktion:** `checkSpeed(int value)`  
@@ -32,6 +33,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-M2 – SafetyInput: Wert zu groß**
+
 **Ziel:** Prüfen, ob ein zu großer Wert abgelehnt wird  
 **Modul:** SafetyInput  
 **Funktion:** `checkSpeed(int value)`  
@@ -42,7 +44,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 **Nachbedingungen:**  
 - `checkSpeed(10)` liefert `false`  
-- Fehlerstatus über interne Logik gesetzt (z.B. `setInvalidFlag()`)  
+- Fehlerstatus über interne Logik gesetzt (z. B. `setInvalidFlag()`)  
 - keine Weitergabe an Folgemethoden  
 - Bereichsgrenzenprüfung abgeschlossen  
 
@@ -53,6 +55,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-M3 – SetpointManager: Rampenfunktion**
+
 **Ziel:** Prüfen der einfachen Rampenlogik  
 **Modul:** SetpointManager  
 **Funktion:** `calcNext(int current, int target)`  
@@ -63,8 +66,8 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 **Nachbedingungen:**  
 - `calcNext(1, 3)` berechnet neuen Wert (`2`)  
-- Rampensteigerung intern korrekt von `1` → `2`  
-- keine Rücksetzung über `resetRamp()` o.Ä.  
+- Rampensteigerung intern korrekt von `1 → 2`  
+- keine Rücksetzung über `resetRamp()` o. Ä.  
 - Zustand des Moduls konsistent  
 
 **Durchgeführt:** Ja  
@@ -78,6 +81,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-I1 – SafetyInput + SetpointManager**
+
 **Ziel:** Validierung + Rampenberechnung in Kombination  
 **Module:** SafetyInput, SetpointManager  
 
@@ -103,6 +107,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-I2 – SetpointManager + MotorActuator**
+
 **Ziel:** Übergabe des Sollwerts an den Aktuator  
 **Module:** SetpointManager, MotorActuator  
 
@@ -113,7 +118,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 **Erwartetes Ergebnis:**  
 - Schritt 1: `1`  
-- Schritt 2: Beispielwert (z.B. 20 %)  
+- Schritt 2: Beispielwert (z. B. 20 %)  
 
 **Nachbedingungen:**  
 - berechneter Setpoint aus `calcNext()` übernommen (`1`)  
@@ -128,6 +133,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 ---
 
 ### **TC-I3 – MainControlUnit + SafetyInput**
+
 **Ziel:** Prüfung der Wertübernahme im Hauptsystem  
 **Module:** MainControlUnit, SafetyInput  
 
@@ -143,7 +149,7 @@ Alle Tests wurden manuell ausgeführt. Das Ergebnis jedes Testfalls ist unten ve
 
 **Nachbedingungen:**  
 - `checkSpeed(2)` liefert `true`  
-- MCU übernimmt Wert über interne Logik (z.B. `setUiSpeedCommandStep(2)`)  
+- MCU übernimmt Wert über interne Logik (z. B. `setUiSpeedCommandStep(2)`)  
 - Weitergabe an SetpointManager erfolgt korrekt (`setTargetRpm()`)  
 - keine Fehlertrigger durch `setSafetyInputs()`  
 - MCU-Zustand konsistent aktualisiert  
