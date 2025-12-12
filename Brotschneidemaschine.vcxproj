@@ -20,20 +20,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\00_mainControlUnit\mainControlUnit.hpp" />
+    <ClInclude Include="src\01_userInterfaceService\userInterface.hpp" />
     <ClInclude Include="src\02_motorActuator\motorActuator.hpp" />
     <ClInclude Include="src\02_motorActuator\setPointManager.hpp" />
     <ClInclude Include="src\03_safetyControlUnit\safetyInput.hpp" />
     <ClInclude Include="src\04_monitoringService\currentSensor.hpp" />
     <ClInclude Include="src\04_monitoringService\monitoringService.hpp" />
+    <ClInclude Include="src\05_dataManagement\csvLogger.hpp" />
+    <ClInclude Include="src\05_dataManagement\fileDriver.hpp" />
     <ClInclude Include="src\05_dataManagement\maintenanceManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\00_mainControlUnit\mainControlUnit.cpp" />
+    <ClCompile Include="src\01_userInterfaceService\userInterface.cpp" />
     <ClCompile Include="src\02_motorActuator\motorActuator.cpp" />
     <ClCompile Include="src\02_motorActuator\setPointManager.cpp" />
     <ClCompile Include="src\03_safetyControlUnit\safetyInput.cpp" />
     <ClCompile Include="src\04_monitoringService\currentSensor.cpp" />
     <ClCompile Include="src\04_monitoringService\monitoringService.cpp" />
+    <ClCompile Include="src\05_dataManagement\csvLogger.cpp" />
+    <ClCompile Include="src\05_dataManagement\fileDriver.cpp" />
     <ClCompile Include="src\05_dataManagement\maintenanceManager.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -123,7 +129,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService;$(ProjectDir)src\05_dataManagement</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\01_userInterface;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService;$(ProjectDir)src\05_dataManagement</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +145,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService;$(ProjectDir)src\05_dataManagement</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\00_mainControlUnit;$(ProjectDir)src\01_userInterface;$(ProjectDir)src\02_motorActuator;$(ProjectDir)src\03_safetyControlUnit;$(ProjectDir)src\04_monitoringService;$(ProjectDir)src\05_dataManagement</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

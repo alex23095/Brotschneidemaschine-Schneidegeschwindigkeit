@@ -72,6 +72,15 @@
     <ClInclude Include="src\05_dataManagement\maintenanceManager.hpp">
       <Filter>Headerdateien\05_dataManagement</Filter>
     </ClInclude>
+    <ClInclude Include="src\05_dataManagement\csvLogger.hpp">
+      <Filter>Headerdateien\05_dataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\05_dataManagement\fileDriver.hpp">
+      <Filter>Headerdateien\05_dataManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="src\01_userInterfaceService\userInterface.hpp">
+      <Filter>Headerdateien\01_userInterfaceService</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -97,6 +106,15 @@
     </ClCompile>
     <ClCompile Include="src\05_dataManagement\maintenanceManager.cpp">
       <Filter>Quelldateien\05_dataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\05_dataManagement\csvLogger.cpp">
+      <Filter>Quelldateien\05_dataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\05_dataManagement\fileDriver.cpp">
+      <Filter>Quelldateien\05_dataManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="src\01_userInterfaceService\userInterface.cpp">
+      <Filter>Quelldateien\01_userInterfaceService</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
