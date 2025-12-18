@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <string>
 
+class MainControlUnit;
+enum class SafetyState;
+
 /// fasst den anzuzeigenden Maschinenstatus zusammen.
 struct Status {
     bool safetyOk = false;
@@ -24,7 +27,7 @@ public:
     void onSpeedPercentChange(int step10);
 
     /// gibt einen Startbefehl fr den Motor auf der Konsole aus
-    void commandStart();
+    void commandStart(int step10);
 
     /// meldet einen Stop-Befehl
     void commandStop();
@@ -52,4 +55,31 @@ class LogViewer {
 public:
     /// erzeugt einen String fr die angeforderte Seite und gibt ihn zur Diagnose aus
     std::string showPage(int page);
+};
+
+/// kapselt die Konsolenbedienung aus main.cpp
+class ConsoleUserInterface {
+public:
+    ConsoleUserInterface(MainControlUnit& mcu, UserInterfaceService& uiService, LogViewer& logViewer);
+
+    /// startet die Haupt-Schleife
+    void run();
+
+private:
+    void showMainMenu();
+    void handleSafetyMenu();
+    void handleMotorMenu();
+    void handleDataHandlerMenu();
+    void applySafetyToMcu(SafetyState state);
+    void clearScreen() const;
+    void waitSeconds(int seconds) const;
+
+    MainControlUnit& mcu_;
+    UserInterfaceService& uiService_;
+    LogViewer& logViewer_;
+
+    int speedStep_ = 0;       // aktueller UI-Speed 0–10
+    int storedSpeedStep_ = 5; // "gemerkter" Wert für Motor-Start
+    bool motorRunning_ = false;
+    SafetyState currentSafety_;
 };

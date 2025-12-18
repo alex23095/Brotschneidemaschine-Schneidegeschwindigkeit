@@ -61,10 +61,14 @@ void MainControlUnit::tick()
     // 1) Safety-Eingänge entprellen / auswerten
     safetyInput_.readInputs(pendingSafetyInputs_);
     const bool safetyOk = safetyInput_.isSafetyOk();
+    const bool safetyReady = (safetyInput_.getSafetyStatus() == SafetyState::Safe) && safetyOk;
 
     // 2) Sollwert-Rampe aktualisieren (RPM)
-    setpointManager_.update();
-    const int rpmCmd = setpointManager_.currentSetpointRpm();
+    int rpmCmd = 0;
+    if (safetyReady) {
+        setpointManager_.update();
+        rpmCmd = setpointManager_.currentSetpointRpm();
+    }
 
     // 3) Motor-Aktuator versorgen
     motorActuator_.setSafetyOk(safetyOk);
