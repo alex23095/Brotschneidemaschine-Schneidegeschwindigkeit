@@ -100,3 +100,81 @@ Requirements des Projekts umgesetzt**:
 - Die Architektur aus Sprint 2 hat sich als vollständig und tragfähig erwiesen  
 
 Sprint 3 stellt damit den **funktionalen Abschluss des Projekts** dar.
+
+# Review & Retro  
+## Sprint 3
+
+---
+
+## Vergleich Architektur / Design vs. Implementierung Sprint 3
+
+| Geplant (Architektur / Design) | Implementiert in Sprint 3 | Abweichung |
+|--------------------------------|---------------------------|------------|
+| CSV-Logging mit 1 Hz über Persistence-Schicht | CSV-Logging vollständig umgesetzt über `CsvLogger` | Frequenz fest implementiert (nicht parametrierbar) |
+| Nutzung eines Dateisystem-Abstraktionslayers | Direkte Nutzung von `std::filesystem` (C++17) | Keine zusätzliche Abstraktionsklasse eingeführt |
+| Logging robust gegen Neustart & bestehende Dateien | Existenzprüfung, Neu-Anlage und Fortführung umgesetzt | Keine Log-Rotation implementiert |
+| UI-Komponente als eigenständiges Modul | `UserInterface` als separates Modul integriert | UI weiterhin rein funktional (keine echte Anzeige) |
+| Vollständiger End-to-End-Datenfluss (UI → MCU → Persistence) | Steuer- und Logging-Fluss vollständig realisiert | – |
+| Toolchain-Anpassung dokumentieren (C++17) | C++17 aktiv gesetzt und genutzt | Anpassung erst spät im Sprint erfolgt |
+
+---
+
+## Was lief gut?
+
+- CSV-Export funktioniert stabil und nachvollziehbar im laufenden Betrieb.  
+- `std::filesystem` erfolgreich integriert und produktiv genutzt.  
+- UserInterface erstmals als **echtes Modul** im Projekt vorhanden.  
+- End-to-End-Fluss (UI → MCU → Setpoint → Motor → Logging) klar nachvollziehbar.  
+- Projekt- und Ordnerstruktur nun stabil und sprintübergreifend nutzbar.  
+- Compiler- und Build-Probleme systematisch analysiert und sauber gelöst.  
+
+---
+
+## Was lief nicht gut?
+
+- Zeitverlust durch fehlendes Wissen über C++-Sprachstandard (C++14 vs. C++17).  
+- Fehlermeldungen zu `std::filesystem` zunächst schwer einzuordnen.  
+- CSV-Design (Header, Felder, Format) erst spät finalisiert.  
+- Logging-Strategie (Überschreiben / Anhängen / Rotation) nicht vollständig geklärt.  
+- UI bleibt funktional minimal, keine Visualisierung oder Zustandsanzeige.  
+
+---
+
+## Lessons Learned
+
+- Sprachstandard ist Teil der Architekturentscheidung, nicht nur ein Compiler-Detail.  
+- Neue Funktionalität (z. B. Dateizugriff) ⇒ Toolchain früh prüfen.  
+- Persistenz- und Logging-Konzepte früh sauber spezifizieren.  
+- Ordnerstruktur, Include-Pfade und Build-Settings gehören zusammen betrachtet.  
+- End-to-End-Flows helfen enorm beim Debugging komplexer Fehler.  
+- Dokumentation parallel zur Implementierung pflegen, nicht erst am Sprintende.
+
+---
+
+## Baseline Sprint 3
+
+- **Funktional erweitert:**  
+  - CSV-Logging (1 Hz), Persistenz über Dateisystem, UI-Anbindung.
+
+- **Implementierte/erweiterte Komponenten:**  
+  - `CsvLogger`, `PersistenceManager`, `UserInterface`,  
+    Erweiterungen in `MainControlUnit` zur Logging-Integration.
+
+- **Teststatus:**  
+  - Umfangreiche manuelle Modul- und Integrationstests.  
+  - Regressionstests für Sprint 1 und Sprint 2 vollständig durchgeführt.  
+  - Keine automatisierten Tests.
+
+- **Dokumentationsstand:**  
+  - Testdokumentation Sprint 3 vollständig.  
+  - Traceability-Matrix aktualisiert.  
+  - Architektur und Implementierung weitgehend konsistent (UI & Logging nicht mehr nur konzeptionell).
+
+---
+
+## Gesamtfazit Sprint 3
+
+Sprint 3 stellt einen klaren Reife-Sprung dar:  
+Erstmals existiert eine durchgängige Persistenzlösung mit realem Dateizugriff sowie ein klarer End-to-End-Datenfluss inklusive UI-Anbindung.  
+Die Systembasis ist nun stabil genug, um in kommenden Sprints Themen wie Testautomatisierung, UI-Erweiterung oder Logging-Rotation gezielt anzugehen.
+
