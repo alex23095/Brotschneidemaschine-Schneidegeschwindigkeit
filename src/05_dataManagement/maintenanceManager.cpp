@@ -1,22 +1,28 @@
 #include "maintenanceManager.hpp"
 
-MaintenanceManager::MaintenanceManager(std::uint64_t maintenanceIntervalMs)
-    : maintenanceIntervalMs_{ maintenanceIntervalMs }
-    , runtimeMs_{ 0ULL }
+MaintenanceManager::MaintenanceManager()
+    : runtimeMs_(0)
+    , limitMs_(48ull * 60ull * 60ull * 1000ull) // 48h in ms
 {
 }
 
-void MaintenanceManager::updateRuntimeMs(std::uint64_t deltaMs)
-{
-    runtimeMs_ += deltaMs;
+void MaintenanceManager::updateRuntimeMS(std::uint32_t deltaMs, bool motorRunning) {
+    if (!motorRunning) return;
+    runtimeMs_ += static_cast<std::uint64_t>(deltaMs);
 }
 
-std::string MaintenanceManager::getMaintenanceAdvice() const
-{
-    if (!isMaintenanceDue()) {
-        return "Maintenance not required yet.";
-    }
+bool MaintenanceManager::isMaintenanceDue() const {
+    return runtimeMs_ >= limitMs_;
+}
 
-    const auto hours = runtimeMs_ / (1000ULL * 60ULL * 60ULL);
-    return "Maintenance required. Runtime hours: " + std::to_string(hours);
+bool MaintenanceManager::getMaintenanceAdvice() const {
+    return isMaintenanceDue();
+}
+
+std::uint64_t MaintenanceManager::getRuntimeMs() const {
+    return runtimeMs_;
+}
+
+void MaintenanceManager::setMaintenanceLimitMs(std::uint64_t limitMs) {
+    limitMs_ = limitMs;
 }
