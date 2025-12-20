@@ -1,42 +1,21 @@
 #pragma once
-
-#include <cstddef>
-#include <cstdint>
 #include <string>
+#include <cstdint>
+#include <cstdint>
+#include "status.hpp"
 
-#include "fileDriver.hpp"
-
-/// Struktur mit allen relevanten Werten fr einen Logeintrag.
-struct LogRecord {
-    std::string timestamp;
-    bool safetyOk;
-    bool motorEnabled;
-    std::uint8_t dutyCyclePercent;
-    std::uint16_t currentMilliampere;
-    bool overcurrent;
-    bool maintenanceDue;
-};
-
-/// CsvLogger
-/// - formatiert Status- und Messdaten als CSV-Zeile
-/// - delegiert Dateihandling an FileDriver und prft Dateigre auf Rollover
 class CsvLogger {
 public:
-    explicit CsvLogger(FileDriver& driver, std::size_t maxBytes = 1024 * 1024);
+    CsvLogger(const std::string& filename,
+        std::uint64_t maxFileSize);
 
-    /// protokolliert einen Statusdatensatz als CSV
-    void logStatus(const LogRecord& record);
+    bool checkFileSize() const;
 
-    /// prft die Dateigre und lsst bei Bedarf rotate() ausfhren.
-    bool rotateLogIfNeeded();
+    void rotateLogIfNeeded();
 
-    /// liefert die aktuelle Dateigre fr Diagnose/Testzwecke.
-    std::size_t checkFileSize() const;
+    void logStatus(const Status& st);
 
 private:
-    static std::string boolToString(bool value);
-    std::string formatRecord(const LogRecord& record) const;
-
-    FileDriver& driver_;
-    std::size_t maxBytes_;
+    std::string filename_;
+    std::uint64_t maxFileSize_;
 };
