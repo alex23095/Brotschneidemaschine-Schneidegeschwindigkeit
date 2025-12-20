@@ -1,47 +1,68 @@
 #include "csvLogger.hpp"
+#include <filesystem>
+#include <fstream>
 
-#include <sstream>
-
-CsvLogger::CsvLogger(FileDriver& driver, std::size_t maxBytes)
-    : driver_{ driver }
-    , maxBytes_{ maxBytes }
-{
+CsvLogger::CsvLogger(const std::string& filename, std::uint64_t maxFileSize)
+    : filename_(filename), maxFileSize_(maxFileSize) {
 }
 
-void CsvLogger::logStatus(const LogRecord& record)
-{
-    rotateLogIfNeeded();
-    driver_.writeLine(formatRecord(record));
-}
+bool CsvLogger::checkFileSize() const {
+    namespace fs = std::filesystem;
 
-bool CsvLogger::rotateLogIfNeeded()
-{
-    if (checkFileSize() >= maxBytes_) {
-        return driver_.rotate();
+    if (!fs::exists(filename_)) {
+        return false;   // Datei existiert noch nicht → nicht zu groß
     }
 
-    return false;
+    return fs::file_size(filename_) >= maxFileSize_;
 }
 
-std::size_t CsvLogger::checkFileSize() const
-{
-    return driver_.sizeBytes();
+void CsvLogger::rotateLogIfNeeded() {
+    namespace fs = std::filesystem;
+
+    if (!checkFileSize()) {
+        return; // nichts zu tun
+    }
+
+    // Zielname für rotiertes Log (minimal: _1)
+    const std::string rotatedName = filename_ + "_1";
+
+    // Falls bereits vorhanden, überschreiben wir es
+    if (fs::exists(rotatedName)) {
+        fs::remove(rotatedName);
+    }
+
+    // Aktuelles Log umbenennen
+    if (fs::exists(filename_)) {
+        fs::rename(filename_, rotatedName);
+    }
+
+    // Neue leere Logdatei anlegen
+    std::ofstream out(filename_, std::ios::out);
 }
 
-std::string CsvLogger::boolToString(bool value)
-{
-    return value ? "true" : "false";
-}
+void CsvLogger::logStatus(const Status& st) {
+    // 1) ggf. rotieren
+    rotateLogIfNeeded();
 
-std::string CsvLogger::formatRecord(const LogRecord& record) const
-{
-    std::ostringstream oss;
-    oss << record.timestamp << ','
-        << boolToString(record.safetyOk) << ','
-        << boolToString(record.motorEnabled) << ','
-        << static_cast<int>(record.dutyCyclePercent) << ','
-        << record.currentMilliampere << ','
-        << boolToString(record.overcurrent) << ','
-        << boolToString(record.maintenanceDue);
-    return oss.str();
+    namespace fs = std::filesystem;
+
+    // 2) Header nur schreiben, wenn Datei neu/leer ist
+    const bool needHeader = (!fs::exists(filename_)) || (fs::file_size(filename_) == 0);
+
+    // 3) Zeile anhängen
+    std::ofstream out(filename_, std::ios::app);
+    if (!out) return; // Sprint-3-minimal: wenn's nicht geht, einfach nichts tun
+
+    if (needHeader) {
+        out << "runtimeMs;runState;safetyState;speedSetpointPct;speedActualRpm;filteredCurrentmA;maintenanceDue\n";
+    }
+
+    out << st.runtimeMs << ';'
+        << static_cast<int>(st.runState) << ';'
+        << static_cast<int>(st.safetyState) << ';'
+        << st.speedSetpointPct << ';'
+        << st.speedActualRpm << ';'
+        << st.filteredCurrentmA << ';'
+        << (st.maintenanceDue ? 1 : 0)
+        << '\n';
 }
