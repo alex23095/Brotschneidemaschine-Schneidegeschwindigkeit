@@ -1,56 +1,24 @@
-// motorActuator.hpp
 #pragma once
 
-#include <cstdint>
 
-/// MotorActuator:
-/// - nimmt einen Drehzahl-Sollwert (RPM) entgegen
-/// - berücksichtigt Safety-Freigabe
-/// - berechnet daraus einen Duty-Cycle 0..100 % für die PWM
 class MotorActuator {
-public:
-    /// \param minRpm minimale sinnvolle Drehzahl (z.B. 500 U/min)
-    /// \param maxRpm maximale Drehzahl (z.B. 3000 U/min)
-    MotorActuator(int minRpm = 500, int maxRpm = 3000);
 
-    /// Soll-Drehzahl in U/min (typisch vom SetpointManager.currentSetpointRpm()).
-    void setCommandRpm(int rpm);
+    public:
+        MotorActuator();
 
-    /// Ergebnis der Sicherheitskette (SafetyInput / MainControlUnit).
-    /// false → Motor wird abgeschaltet, Duty-Cycle = 0 %.
-    void setSafetyOk(bool ok);
+        void enable();
+        void disable();
 
-    /// Zyklischer Aufruf aus der MainControlUnit.
-    /// Berechnet Enable-Flag und Duty-Cycle.
-    void updateControlLoop();
+        void setDutyPercent(int pct);
+        void stopEmergency();
+        
+        // echte Istwerte (vom Sensor / Test / Simulation)
+        void setActualRpm(int rpm);   // für später: Sensor-Update
+        int readActualPercent() const;
 
-    /// Direkte Vorgabe eines Duty-Cycle-Werts (0..100 %). Überschreibt den aus RPM berechneten Wert.
-    void setManualDutyCycle(std::uint8_t dutyPercent);
+    private:
+        int  dutyPct_;     // 0..100
+        bool enabled_;
+   
 
-    /// true, wenn Motor energiert werden darf.
-    bool isEnabled() const { return enabled_; }
-
-    /// Duty-Cycle 0..100 %, an PWM-Treiber weiterzugeben.
-    std::uint8_t dutyCyclePercent() const { return dutyCyclePercent_; }
-
-    /// Intern verwendeter, geklemmter Drehzahlsollwert.
-    int commandRpm() const { return rpmCmd_; }
-
-    /// Liefert den aktuellen (geklemmten) RPM-Wert für Traceability.
-    int getMeasuredSpeed() const { return rpmCmd_; }
-
-private:
-    int         minRpm_;
-    int         maxRpm_;
-
-    int         rpmCmd_;            // zuletzt gesetzter RPM-Sollwert (geklammert)
-    bool        safetyOk_;          // letzte bekannte Safety-Freigabe
-    bool        enabled_;           // ergibt sich aus rpmCmd_ & safetyOk_
-    std::uint8_t dutyCyclePercent_; // 0..100
-
-    bool         manualDutyActive_;
-    std::uint8_t manualDutyPercent_;
-
-    int clampRpm(int rpm) const;
-    std::uint8_t mapRpmToDuty(int rpm) const;
-};
+ };
