@@ -1,28 +1,24 @@
 #pragma once
-
 #include <cstdint>
-#include <string>
 
-/// MaintenanceManager
-/// - zählt kumulierte Betriebszeit in Millisekunden
-/// - meldet Wartungsbedarf nach Erreichen eines Schwellwertes
 class MaintenanceManager {
 public:
-    explicit MaintenanceManager(std::uint64_t maintenanceIntervalMs = 172800000ULL); // 48 h
+    MaintenanceManager();
 
-    /// Laufzeit um deltaMs erhöhen.
-    void updateRuntimeMs(std::uint64_t deltaMs);
+    // Zeit hochzÃ¤hlen
+    void updateRuntimeMS(std::uint32_t deltaMs, bool motorRunning);
+    // Auswertung Zeitintervall Ã¼berschritten
+    bool isMaintenanceDue() const;
+    
+    //Wartungsempfehlung
+    bool getMaintenanceAdvice() const;
 
-    /// true, wenn die kumulierte Laufzeit den Schwellwert überschritten hat.
-    bool isMaintenanceDue() const { return runtimeMs_ >= maintenanceIntervalMs_; }
+    // fÃ¼r Simulation
+    std::uint64_t getRuntimeMs() const;
+    void setMaintenanceLimitMs(std::uint64_t limitMs);
 
-    /// Liefert einen kurzen Hinweistext für UI/Logger.
-    std::string getMaintenanceAdvice() const;
-
-    /// Zugriff auf kumulierte Laufzeit (z. B. für Tests oder Anzeige).
-    std::uint64_t runtimeMs() const { return runtimeMs_; }
 
 private:
-    std::uint64_t maintenanceIntervalMs_;
     std::uint64_t runtimeMs_;
+    std::uint64_t limitMs_;
 };
