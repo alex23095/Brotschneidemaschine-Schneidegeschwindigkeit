@@ -1,98 +1,61 @@
 #pragma once
 #include <cstdint>
-#include <string>
-#include <chrono>
-#include "safetyInput.hpp"
-#include "setPointManager.hpp"
 #include "motorActuator.hpp"
+#include "safetyInput.hpp"
+#include "status.hpp"
+#include "speedSensorSim.hpp"
+#include "currentSensor.hpp"
 #include "monitoringService.hpp"
 #include "maintenanceManager.hpp"
 
-/// MainControlUnit:
-/// - zentrale Steuerlogik
-/// - bindet SafetyInput, SetpointManager und MotorActuator zusammen
-/// - Singleton (eine globale Instanz für das System)
+
 class MainControlUnit {
 public:
-    /// Zugriff auf die Singleton-Instanz.
-    static MainControlUnit& instance();
+    //Konsturktor
+    MainControlUnit(MotorActuator& motor, SafetyInput& safety,
+        CurrentSensor& currentSensor, MonitoringService& monitoring);
 
-    /// UI-Befehl: Schritt 0..10 (entspricht 0..100 % in 10%-Schritten).
-    void setSpeedStep(int step10);
 
-    /// Alias für UI-Aufrufe; legt den Sollwert in 10%-Schritten fest.
-    void setUiSpeedCommandStep(int step10) { setSpeedStep(step10); }
+    // UI-Befehle
+    void setSpeedStep(int step10);   // 0..10
+    void start();
+    void stop();
 
-    /// Direkte Vorgabe eines Duty-Cycle-Werts (0..100 %).
-    void setDutyCycle(std::uint8_t dutyPercent);
-
-    /// Rohzustände der Sicherheits-Eingänge (von HW-Ebene/GPIO).
-    void readInputs(const SafetyInput::Inputs& in);
-
-    /// Komfortmethode für UI/Tests, setzt die Eingangswerte direkt.
-    void setSafetyInputs(const SafetyInput::Inputs& in) { readInputs(in); }
-
-    /// Zyklische Steuerung (z.B. alle 10 ms aufrufen).
+    // Steuerzyklus (alle 100 ms)
     void tick();
-
-    /// Sprint-1-kompatible Bezeichnung für die Zyklusausführung.
     void executeCycle();
+    void updateControlLoop();
 
-    /// Laufzeitmessung des letzten Zyklus in Millisekunden.
-    std::uint32_t getLastCycleTimeMs() const { return lastCycleTimeMs_; }
+    // Status (für UI)
+    bool isRunning() const;
+    int  speedStep() const;
 
-    /// Monitoring / Debug-Informationen:
-    int currentSetpointRpm() const { return setpointManager_.currentSetpointRpm(); }
-    int targetSetpointRpm() const { return setpointManager_.targetSetpointRpm(); }
+    //Gesamtstatus
+    const Status& getStatus() const;
 
-    /// Sicherheitsstatus abrufen.
-    SafetyState getSafetyStatus() const { return safetyInput_.getSafetyStatus(); }
+    //Wartung Simulation
+    std::uint64_t getRuntimeMs() const;
+    void setMaintenanceLimitMs(std::uint64_t limitMs);
 
-    bool isMotorEnabled() const { return motorActuator_.isEnabled(); }
-    std::uint8_t dutyCyclePercent() const { return motorActuator_.dutyCyclePercent(); }
-
-    bool isSafetyOk() const { return safetyInput_.isSafetyOk(); }
-
-    /// Selbsttest beim Start ausführen.
-    bool runSelfTest();
-
-    /// Gesamtstatus für Diagnose / Traceability.
-    bool getStatus() const { return selfTestPassed_ && isSafetyOk(); }
-
-    /// Monitoring und Maintenance Zugriff:
-    std::uint16_t lastMeasuredCurrentMa() const { return monitoringService_.readCurrent(); }
-    bool isOvercurrent() const { return monitoringService_.checkOvercurrent(); }
-    bool isMaintenanceDue() const { return maintenanceManager_.isMaintenanceDue(); }
-    std::string maintenanceAdvice() const { return maintenanceManager_.getMaintenanceAdvice(); }
-
-    /// Ermöglicht Anpassungen des simulierten Stromwertes (z. B. für Tests).
-    void setSimulatedCurrent(std::uint16_t currentMa);
+    //Selftest
+    bool runSelfTest() const;
 
 private:
-    // Singleton: Konstruktor privat
-    MainControlUnit();
 
-    // Kopieren/Bewegen verbieten
-    MainControlUnit(const MainControlUnit&) = delete;
-    MainControlUnit& operator=(const MainControlUnit&) = delete;
-    MainControlUnit(MainControlUnit&&) = delete;
-    MainControlUnit& operator=(MainControlUnit&&) = delete;
+    MotorActuator& motor_;
+    SafetyInput& safety_;
+    CurrentSensor& currentSensor_;
+    MonitoringService& monitoring_;
 
-    // Untergeordnete Module
-    SafetyInput        safetyInput_;
-    SetpointManager    setpointManager_;
-    MotorActuator      motorActuator_;
-    CurrentSensor      currentSensor_;
-    MonitoringService  monitoringService_;
-    MaintenanceManager maintenanceManager_;
+    MaintenanceManager maintenance_;
 
-    // Letzte Roh-Safety-Eingänge
-    SafetyInput::Inputs pendingSafetyInputs_;
+    //Analgenstatus
+    Status status_{};
 
-    // Laufzeitmessung
-    std::uint32_t lastCycleTimeMs_;
-    std::chrono::steady_clock::time_point lastTickTime_;
+    //Sensor Simulation
+    SpeedSensorSim sensorSim_;
 
-    // Selbsttest-Ergebnis
-    bool selfTestPassed_;
+    bool running_;
+    int  speedStep_; // 0..10
+
 };
